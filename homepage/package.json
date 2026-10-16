@@ -1,0 +1,14 @@
+{
+  "name": "umat-complaint-management",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:status": "docker compose --file backend/docker-compose.yml ps",
+    "dev:logs": "docker compose --file backend/docker-compose.yml logs --follow api nginx postgres redis",
+    "dev:stop": "docker compose --file backend/docker-compose.yml down"
+  },
+  "dependencies": {
+    "better-auth": "^1.6.26"
+  }
+}

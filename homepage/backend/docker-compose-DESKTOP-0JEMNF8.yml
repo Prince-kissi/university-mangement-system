@@ -1,0 +1,79 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [complaints]
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [complaints]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PostgreSql: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Redis: redis:6379,password=${REDIS_PASSWORD},abortConnect=false
+      Frontend__BaseUrl: ${FRONTEND_URL}
+      Security__AnonymousTrackingPepper: ${ANONYMOUS_TRACKING_PEPPER}
+      Security__RequireHttps: "false"
+      Database__UseInMemory: "false"
+      Database__MigrateOnStartup: "true"
+      Smtp__Host: ${SMTP_HOST}
+      Smtp__Port: ${SMTP_PORT}
+      Smtp__Username: ${SMTP_USERNAME}
+      Smtp__Password: ${SMTP_PASSWORD}
+      Smtp__FromAddress: ${SMTP_FROM}
+      Cors__AllowedOrigins__0: ${FRONTEND_URL}
+    volumes:
+      - evidence_data:/app/storage/evidence
+      - backup_data:/app/storage/backups
+      - data_protection_keys:/app/storage/keys
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [complaints]
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: backend/nginx/Dockerfile
+    image: umat-complaints-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on: [api]
+    networks: [complaints]
+
+networks:
+  complaints:
+
+volumes:
+  postgres_data:
+  redis_data:
+  evidence_data:
+  backup_data:
+  data_protection_keys:

@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - UMAT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="password-visibility.css?v=20260721-1">
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <div class="login-orbits" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <section class="login-stage" aria-label="Student login page">
+      <a href="homepage.html" class="login-logo" aria-label="Back to homepage">
+        <img src="LOGO2.png" alt="UMaT — University of Mines and Technology">
+      </a>
+
+      <div class="login-hero-text">
+        <p>Secure Portal</p>
+        <h1>Login to continue your complaint process</h1>
+        <span>Access your dashboard, track complaint progress, or submit anonymously with privacy-first access.</span>
+      </div>
+
+      <form class="login-page-card" id="studentLoginForm" aria-label="Login form">
+        <h2>Student Login</h2>
+
+        <label class="login-page-field">
+          <span>Student Email or Reference Number</span>
+          <input id="studentLoginIdentity" type="text" placeholder="Enter your Student Email or Reference Number" autocomplete="username" required>
+        </label>
+
+        <label class="login-page-field">
+          <span>Password</span>
+          <input name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+        </label>
+
+        <div class="login-page-row">
+          <label>
+            <input type="checkbox">
+            Remember me
+          </label>
+          <a href="forgot-password.html">Forgot password?</a>
+        </div>
+
+        <button class="login-page-submit" type="submit">Login</button>
+
+        <div class="anonymous-wrap">
+          <a class="anonymous-login" href="anonymous-complaint.html" aria-describedby="anonymousNote">Submit Anonymous Complaint</a>
+          <span class="anonymous-note" id="anonymousNote">Only one anonymous complaint can be submitted every 30 days.</span>
+        </div>
+
+        <p class="login-page-register">Don’t have an account? <a href="register.html">Register here</a></p>
+
+      </form>
+    </section>
+  </main>
+  <script src="app.js?v=20260722-student-gate"></script>
+  <script src="password-visibility.js?v=20260721-1"></script>
+</body>
+</html>

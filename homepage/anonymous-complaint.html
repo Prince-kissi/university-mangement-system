@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anonymous Complaint - UMAT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+</head>
+<body class="utility-page anon-page anonymous-page">
+<main>
+    <section class="utility-hero">
+      <div class="utility-hero-pattern" aria-hidden="true"></div>
+      <div class="container utility-hero-grid">
+        <div class="utility-hero-copy">
+          <div class="anon-badge">
+            <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z"/></svg>
+            Confidential Reporting
+          </div>
+          <h1>Anonymous Complaint</h1>
+          <p>Share a sensitive concern without attaching your student identity to the department-facing complaint record.</p>
+        </div>
+        <aside class="utility-hero-panel">
+          <div class="utility-panel-top">
+            <div>
+              <strong>Privacy mode</strong>
+              <span>Identity-hidden reporting workflow</span>
+            </div>
+            <div class="utility-icon-box"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Z"/></svg></div>
+          </div>
+          <ul class="utility-panel-list">
+            <li><span>Identity fields</span><strong>Not required</strong></li>
+            <li><span>Rate limit</span><strong>One per 30 days</strong></li>
+            <li><span>Reference</span><strong>Generated after submit</strong></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <div class="utility-breadcrumb">
+      <div class="container"><a href="homepage.html">Home</a><span>/</span><strong>Anonymous Complaint</strong></div>
+    </div>
+
+    <section class="utility-main">
+      <div class="container">
+        <div class="anon-trust-grid" style="margin-bottom:24px;">
+          <div class="anon-trust-card">
+            <svg viewBox="0 0 24 24"><path d="M17 9h1a2 2 0 0 1 2 2v9H4v-9a2 2 0 0 1 2-2h1V7a5 5 0 0 1 10 0v2Z"/></svg>
+            <strong>Identity protected</strong>
+            <span>No name, index number, or student email is required to submit this form.</span>
+          </div>
+          <div class="anon-trust-card">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16v14H7l-3 3V4Zm4 5h8v2H8V9Zm0 4h6v2H8v-2Z"/></svg>
+            <strong>Still trackable</strong>
+            <span>You receive a reference code so you can follow the case without logging in.</span>
+          </div>
+          <div class="anon-trust-card">
+            <svg viewBox="0 0 24 24"><path d="M3 12h4l2-7 4 14 3-7h5v2h-3.7L13 24 9 11l-.5 3H3v-2Z"/></svg>
+            <strong>Safety review</strong>
+            <span>Reports may be reviewed for urgency, misuse, threats, or repeated submissions.</span>
+          </div>
+        </div>
+
+        <div class="anon-layout">
+          <section class="anon-form-panel">
+            <div class="anon-form-head">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z"/></svg>
+              <div>
+                <h2>Submit Anonymous Report</h2>
+                <p>Provide enough detail for the responsible office to act without needing to know who you are.</p>
+              </div>
+            </div>
+
+            <form class="anon-form" id="anonymousComplaintForm">
+              <label class="anon-field">
+                <span>Select Administrative Unit</span>
+                <input type="search" name="departmentSearch" placeholder="Search administrative units" autocomplete="off">
+                <select name="department" required>
+                  <option value="">Loading administrative units&hellip;</option>
+                </select>
+              </label>
+              <div class="anon-row">
+                <label class="anon-field">
+                  <span>Complaint Category</span>
+                  <select name="category" required>
+                    <option value="" selected disabled>Select category</option>
+                    <option>Academic Concern</option>
+                    <option>Harassment or Misconduct</option>
+                    <option>Safety or Security</option>
+                    <option>Hostel or Facilities</option>
+                    <option>Finance or Fees</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+
+                <label class="anon-field">
+                  <span>Urgency</span>
+                  <select name="urgency" required>
+                    <option>Normal</option>
+                    <option>High</option>
+                    <option>Critical</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="anon-row">
+                <label class="anon-field">
+                  <span>Department or Location</span>
+                  <input type="text" name="location" placeholder="Example: Hostel block, department, office">
+                </label>
+
+                <label class="anon-field">
+                  <span>Date of Incident</span>
+                  <input type="date" name="incidentDate">
+                </label>
+              </div>
+
+              <label class="anon-field">
+                <span>Complaint Details</span>
+                <textarea name="details" placeholder="Describe what happened, who or what was involved, and what action you are requesting." required></textarea>
+              </label>
+
+              <label class="anon-field">
+                <span>Optional Contact Method</span>
+                <input type="text" name="safeContact" placeholder="Optional email or phone if you want follow-up">
+              </label>
+
+              <label class="anon-field">
+                <span>Supporting File</span>
+                <input type="file" name="evidence" accept=".pdf,.jpg,.jpeg,.png,.docx">
+              </label>
+
+              <label class="anon-check">
+                <input type="checkbox" required>
+                <span>I understand that anonymous reporting may limit follow-up questions, and I will keep the generated reference number for tracking.</span>
+              </label>
+
+              <div class="anon-actions">
+                <button class="anon-secondary" type="reset">Clear Form</button>
+                <button class="anon-submit" type="submit">Submit Anonymous Complaint</button>
+              </div>
+
+              <p class="anon-message" id="anonymousComplaintMessage" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <aside class="anon-side-panel">
+            <h3>Before You Submit</h3>
+            <ol>
+              <li>Remove personal details from the description if you do not want the receiving department to infer your identity.</li>
+              <li>Keep dates, locations, and evidence specific enough for investigation.</li>
+              <li>Use a safe contact method only if you are comfortable receiving follow-up.</li>
+              <li>Call campus security or the appropriate emergency contact for immediate safety threats.</li>
+            </ol>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z"/></svg>
+        <span>UMAT Complaint Management System</span>
+      </div>
+      <p>&copy; 2026 University of Mines and Technology. All Rights Reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+        <a href="accessibility-statement.html">Accessibility</a>
+        <a href="help-center.html">Help</a>
+        <a href="system-status.html">Status</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+  <script src="complaint-pages.js?v=20260806-routing"></script>
+</body>
+</html>

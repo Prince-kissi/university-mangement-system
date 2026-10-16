@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Verify your UMaT student complaint account.">
+  <title>Verify Your Student Account | UMaT Complaints</title>
+  <link rel="stylesheet" href="page.css?v=20260806-student-verification">
+</head>
+<body class="student-verification-page">
+  <main class="student-verification-shell">
+    <a class="student-verification-brand" href="homepage.html"><img src="LOGO2.png" alt="University of Mines and Technology"></a>
+    <section class="student-verification-card">
+      <ol class="student-verification-progress" aria-label="Account creation progress">
+        <li class="is-complete"><span>&#10003;</span><b>Registration</b></li>
+        <li class="is-active"><span>2</span><b>Verification</b></li>
+        <li><span>3</span><b>Account Created</b></li>
+      </ol>
+      <header>
+        <p>Account created &mdash; verification pending</p>
+        <h1>Verify Your Student Account</h1>
+        <span>Choose SMS OTP or Email OTP, then enter the six-digit code sent to you.</span>
+      </header>
+
+      <form id="studentVerificationMethodForm">
+        <fieldset class="student-verification-methods">
+          <legend class="sr-only">Verification method</legend>
+          <label><input type="radio" name="verificationMethod" value="sms"><span class="method-symbol" aria-hidden="true">SMS</span><strong>Mobile Number</strong><small>Receive a secure one-time password through SMS.</small><b id="studentMaskedPhone"></b><em>Select SMS Verification</em></label>
+          <label><input type="radio" name="verificationMethod" value="email"><span class="method-symbol" aria-hidden="true">@</span><strong>UMaT Student Email</strong><small>Receive a verification code through your UMaT student email.</small><b id="studentMaskedEmail"></b><em>Select Email Verification</em></label>
+        </fieldset>
+        <button class="student-verification-primary" id="sendStudentVerificationCode" type="submit" disabled>Send Verification Code</button>
+        <p class="student-verification-wait">Keep this page open while you wait for your code.</p>
+      </form>
+
+      <form id="studentVerificationCodeForm" hidden>
+        <div class="student-verification-step"><small>Step 2 of 2</small><strong id="studentVerificationMethodTitle">Account Verification</strong></div>
+        <div class="student-code-summary"><div><small>Code sent to</small><strong id="studentCodeDestination"></strong></div><span id="studentCodeTimer">05:00</span></div>
+        <p class="student-verification-wait">Your code may take a few moments to arrive.</p>
+        <div class="student-code-label" id="studentCodeLabel">Enter your six-digit verification code</div>
+        <div class="student-code-grid" role="group" aria-labelledby="studentCodeLabel">
+          <input inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit 1" required><input inputmode="numeric" maxlength="1" aria-label="Digit 2" required><input inputmode="numeric" maxlength="1" aria-label="Digit 3" required><input inputmode="numeric" maxlength="1" aria-label="Digit 4" required><input inputmode="numeric" maxlength="1" aria-label="Digit 5" required><input inputmode="numeric" maxlength="1" aria-label="Digit 6" required>
+        </div>
+        <button class="student-verification-primary" id="verifyStudentAccount" type="submit">Verify Code</button>
+        <div class="student-verification-links"><button id="resendStudentVerificationCode" type="button" disabled>Resend code in 60s</button><button id="changeStudentVerificationMethod" type="button">Change verification method</button></div>
+      </form>
+
+      <section class="student-verification-success" id="studentVerificationSuccess" hidden><span aria-hidden="true">&#10003;</span><h2>Account Created Successfully</h2><p>Your student account has been verified successfully.</p><small>Redirecting to Student Login in <b id="studentRedirectTimer">3</b> seconds&hellip;</small><a class="student-verification-primary" href="login.html?verified=1">Continue to Student Login</a></section>
+      <p class="student-verification-message" id="studentVerificationMessage" role="status" aria-live="polite"></p>
+      <a class="student-verification-back" href="register.html">← Back to registration</a>
+    </section>
+  </main>
+  <script src="app.js?v=20260805-student-verification"></script>
+  <script src="student-verification.js?v=20260805"></script>
+</body>
+</html>

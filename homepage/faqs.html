@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQs – UMAT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="page-animations.css">
+  <style>
+    .fq-hero::before {
+      background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1800&q=60');
+    }
+ .fq-hero{
+  height:  43vh;
+ }
+
+    .fq-hero-icon {
+      width: 96px; height: 96px; margin-left: auto;
+      border: 2px solid rgba(255,255,255,.26); border-radius: 24px;
+      background: rgba(255,255,255,.13); backdrop-filter: blur(14px);
+      display: grid; place-items: center; color: #fff; flex-shrink: 0;
+      animation: phFadeUp .7s ease .2s both;
+    }
+    .fq-hero-icon svg { width: 52px; height: 52px; }
+    .fq-hero-flex { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .fq-hero-flex > div:first-child p { color: #fff; }
+
+    /* ── Search box ──────────────────────────────── */
+    .fq-search-wrap {
+      max-width: 620px; margin: -34px auto 0; position: relative; z-index: 3;
+    }
+    .fq-search {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border-radius: 16px; padding: 0 20px;
+      box-shadow: 0 20px 50px rgba(6,54,38,.18);
+      border: 1px solid #e3eee8;
+      transition: box-shadow .25s ease, transform .25s ease;
+    }
+    .fq-search:focus-within { box-shadow: 0 24px 56px rgba(6,54,38,.24); transform: translateY(-2px); }
+    .fq-search svg { width: 20px; height: 20px; color: #60746b; flex-shrink: 0; }
+    .fq-search input {
+      flex: 1; border: 0; outline: 0; min-height: 58px;
+      font: inherit; font-size: 15.5px; color: #13241f; background: transparent;
+    }
+    .fq-search input::placeholder { color: #9ab4a8; }
+    .fq-no-match {
+      display: none; text-align: center; padding: 40px 0; color: #60746b;
+    }
+    .fq-no-match.show { display: block; }
+
+    /* ── Layout ──────────────────────────────────── */
+    .fq-layout { display: grid; grid-template-columns: 250px 1fr; gap: 36px; align-items: start; }
+    .fq-cat-nav { position: sticky; top: 24px; display: grid; gap: 8px; }
+    .fq-cat-btn {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 13px 16px; border-radius: 12px;
+      border: 1.5px solid #d8e7df; background: #fff;
+      font: inherit; font-size: 13.5px; font-weight: 700; color: #60746b;
+      text-align: left; cursor: pointer; transition: .22s;
+    }
+    .fq-cat-btn .count {
+      font-size: 11px; font-weight: 800; background: #edf7f1; color: #075c45;
+      padding: 2px 8px; border-radius: 99px;
+    }
+    .fq-cat-btn:hover { border-color: #075c45; color: #075c45; }
+    .fq-cat-btn.active {
+      background: linear-gradient(135deg,#075c45,#0f8f78); border-color: transparent; color: #fff;
+      box-shadow: 0 10px 24px rgba(6,54,38,.2);
+    }
+    .fq-cat-btn.active .count { background: rgba(255,255,255,.22); color: #fff; }
+
+    /* ── Accordion ───────────────────────────────── */
+    .fq-group { margin-bottom: 38px; }
+    .fq-group-title {
+      font-size: 13px; font-weight: 800; color: #075c45;
+      text-transform: uppercase; letter-spacing: .06em; margin: 0 0 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .fq-group-title::after { content: ""; flex: 1; height: 1px; background: #d8e7df; }
+
+    .fq-item {
+      background: #fff; border: 1px solid #e3eee8; border-radius: 14px;
+      margin-bottom: 12px; overflow: hidden;
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+    .fq-item:hover { border-color: #b5d4c4; }
+    .fq-item.is-open { border-color: #075c45; box-shadow: 0 14px 34px rgba(6,54,38,.1); }
+
+    .fq-q {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 18px 20px; background: 0; border: 0; cursor: pointer;
+      text-align: left; font: inherit;
+    }
+    .fq-q-text { font-size: 15px; font-weight: 700; color: #13241f; }
+    .fq-q-icon {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      background: #edf7f1; color: #075c45;
+      display: grid; place-items: center;
+      transition: transform .3s cubic-bezier(.2,.7,.3,1), background .3s ease, color .3s ease;
+    }
+    .fq-q-icon svg { width: 16px; height: 16px; }
+    .fq-item.is-open .fq-q-icon {
+      transform: rotate(135deg);
+      background: linear-gradient(135deg,#075c45,#0f8f78); color: #fff;
+    }
+
+    .fq-a-panel {
+      max-height: 0; overflow: hidden; transition: max-height .35s cubic-bezier(.2,.7,.3,1);
+    }
+    .fq-a-panel.open { /* max-height set inline via JS */ }
+    .fq-a-inner { padding: 0 20px 20px; font-size: 14.5px; color: #60746b; line-height: 1.7; }
+    .fq-a-inner strong { color: #13241f; }
+
+    /* ── Still need help ─────────────────────────── */
+    .fq-help {
+      background:
+        radial-gradient(circle at 50% 52%, rgba(2,57,40,.28) 0 29%, transparent 29.4%),
+        radial-gradient(circle at 50% 52%, transparent 0 39%, rgba(45,205,143,.3) 39.4% 48%, transparent 48.5%),
+        radial-gradient(circle at 50% 52%, transparent 0 58%, rgba(2,76,57,.36) 58.4% 66%, transparent 66.5%),
+        linear-gradient(125deg, transparent 0 10%, rgba(54,222,156,.22) 10.5% 15%, transparent 15.5% 100%),
+        linear-gradient(40deg, transparent 0 74%, rgba(54,222,156,.18) 74.5% 79%, transparent 79.5% 100%),
+        linear-gradient(135deg,#063626 0%,#075c45 48%,#0f8f78 100%);
+      border-radius: 24px; padding: 44px 36px; text-align: center; color: #fff;
+      margin-top: 24px;
+      position: relative; overflow: hidden; isolation: isolate;
+      box-shadow: 0 20px 34px rgba(6,54,38,.24);
+    }
+    .fq-help::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.12), transparent 42%),
+        radial-gradient(ellipse at 50% 100%, rgba(255,255,255,.12), transparent 58%);
+    }
+    .fq-help::after {
+      content: "";
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      bottom: -14px;
+      height: 28px;
+      z-index: 0;
+      pointer-events: none;
+      border-radius: 50%;
+      background: rgba(7,92,69,.34);
+      filter: blur(10px);
+    }
+    .fq-help h3,
+    .fq-help p,
+    .fq-help-actions {
+      position: relative;
+      z-index: 1;
+    }
+    .fq-help h3 { margin: 0 0 10px; font-size: clamp(20px,2.4vw,28px); }
+    .fq-help p { margin: 0 0 22px; color: rgba(255,255,255,.84); }
+    .fq-help-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .fq-help-btn {
+      min-width: 180px; min-height: 50px; border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      font-weight: 800; font-size: 14px;
+    }
+    .fq-help-btn.solid { background: linear-gradient(135deg,#f5bd2f,#e59a1c); color:#2d1e05; }
+    .fq-help-btn.outline { border: 1.5px solid rgba(255,255,255,.4); color: #fff; background: rgba(255,255,255,.08); }
+    .fq-help-btn svg { width: 17px; height: 17px; }
+
+    @media (max-width: 900px) {
+      .fq-layout { grid-template-columns: 1fr; }
+      .fq-cat-nav { position: static; flex-direction: row; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <header class="site-header">
+   
+  <!-- ── HERO ────────────────────────────────────── -->
+  <section class="ph-hero fq-hero" style="padding-bottom: 84px;">
+    <div class="ph-bubbles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container ph-hero-inner fq-hero-flex">
+      <div>
+        <div class="ph-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm-1 5h2v6h-2V7Zm0 8h2v2h-2v-2Z"/></svg>
+          Help Center
+        </div>
+        <h1>Frequently Asked Questions</h1>
+        <p>Find quick answers about submitting complaints, tracking progress, privacy, and account access.</p>
+      </div>
+      <div class="fq-hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm-1 5h2v6h-2V7Zm0 8h2v2h-2v-2Z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="container fq-search-wrap">
+    <div class="fq-search">
+      <svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+      <input type="text" id="fqSearch" placeholder="Search a question…" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="ph-breadcrumb" style="margin-top:24px;">
+    <div class="container"><a href="homepage.html">Home</a><span>›</span><strong>FAQs</strong></div>
+  </div>
+
+  <!-- ── BODY ───────────────────────────────────── -->
+  <section class="ph-section">
+    <div class="container">
+      <div class="fq-layout">
+
+        <!-- Category nav -->
+        <nav class="fq-cat-nav" aria-label="FAQ categories">
+          <button class="fq-cat-btn active" data-cat="all">All Questions <span class="count">14</span></button>
+          <button class="fq-cat-btn" data-cat="general">General <span class="count">4</span></button>
+          <button class="fq-cat-btn" data-cat="submitting">Submitting <span class="count">4</span></button>
+          <button class="fq-cat-btn" data-cat="tracking">Tracking</span> <span class="count">3</span></button>
+          <button class="fq-cat-btn" data-cat="account">Account &amp; Privacy <span class="count">3</span></button>
+        </nav>
+
+        <!-- Accordion groups -->
+        <div>
+          <div class="fq-no-match" id="fqNoMatch">
+            <div style="font-size:42px;margin-bottom:10px;">🔍</div>
+            <h3 style="color:#13241f;margin:0 0 6px;">No matching questions</h3>
+            <p style="margin:0;">Try a different keyword or browse a category on the left.</p>
+          </div>
+
+          <div id="fqGroups">
+
+            <!-- GENERAL -->
+            <div class="fq-group" data-group="general">
+              <p class="fq-group-title">General</p>
+
+              <div class="fq-item" data-cat="general">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">What is the UMAT Complaint Management System?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">It's a secure online platform that lets UMAT students submit, track, and receive responses to complaints across all university departments — replacing scattered emails and paperwork with one transparent system.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="general">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">Who can use this platform?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">All currently registered UMAT students can use the platform. Some complaint types also allow anonymous submission for added privacy.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="general">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">Is the platform available 24/7?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Yes. You can submit and track complaints at any time, from any device with internet access. Department responses are sent during working hours.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="general">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">Does it cost anything to submit a complaint?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">No, the service is completely free for all registered students.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUBMITTING -->
+            <div class="fq-group" data-group="submitting">
+              <p class="fq-group-title">Submitting a Complaint</p>
+
+              <div class="fq-item" data-cat="submitting">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">How do I submit a complaint?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Go to the <strong>Submit a Complaint</strong> page, fill in your details and the complaint description, select the relevant department and category, then click submit. You'll receive a reference number instantly.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="submitting">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">Can I attach evidence like screenshots or documents?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Yes. The complaint form allows you to upload PDF, JPG, PNG, or DOCX files up to 10MB each as supporting evidence.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="submitting">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">Can I submit a complaint anonymously?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Yes, toggle "Submit Anonymously" on the complaint form. Note that only one anonymous complaint is allowed every 30 days to prevent misuse.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="submitting">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">What if I don't know which department to choose?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Select "Other" and describe your issue in detail — Student Affairs will review and forward it to the correct department on your behalf.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRACKING -->
+            <div class="fq-group" data-group="tracking">
+              <p class="fq-group-title">Tracking Progress</p>
+
+              <div class="fq-item" data-cat="tracking">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">How do I track my complaint?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Visit the <strong>Track Complaint</strong> page and enter the reference number you received at submission (e.g. UMAT-CMP-2048) to see live status updates.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="tracking">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">How long does it take to resolve a complaint?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Most complaints are resolved within 5 working days. Urgent or critical cases such as safety issues are prioritised for same-day response.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="tracking">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">What if I lose my reference number?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">It was also sent to the email address you provided during submission. If you can't locate it, contact Student Affairs with your index number for assistance.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ACCOUNT -->
+            <div class="fq-group" data-group="account">
+              <p class="fq-group-title">Account &amp; Privacy</p>
+
+              <div class="fq-item" data-cat="account">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">Is my complaint confidential?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Yes. All complaints are handled discreetly and shared only with the relevant department staff necessary to resolve the issue.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="account">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">How do I register an account?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">Click "Register" in the navigation bar, fill in your index number, reference number, full name, and create a password to get started.</div>
+                </div>
+              </div>
+
+              <div class="fq-item" data-cat="account">
+                <button class="fq-q" data-accordion-q aria-expanded="false">
+                  <span class="fq-q-text">I forgot my password — what do I do?</span>
+                  <span class="fq-q-icon"><svg viewBox="0 0 24 24"><path d="M11 5h2v14h-2zM5 11h14v2H5z"/></svg></span>
+                </button>
+                <div class="fq-a-panel">
+                  <div class="fq-a-inner">On the login page, click "Forgot Password?" and follow the instructions sent to your registered student email.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Still need help -->
+      <div class="fq-help">
+        <h3>Still need help?</h3>
+        <p>Our Student Affairs team is ready to assist with anything not covered above.</p>
+        <div class="fq-help-actions">
+          <a href="contact.html" class="fq-help-btn solid">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg>
+            Contact Us
+          </a>
+          <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required" class="fq-help-btn outline">
+            <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>
+            Submit a Complaint
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Zm3.8 5.5 1.4 1.4-5.8 5.8-3.1-3.1 1.4-1.4 1.7 1.7 4.4-4.4Z"/></svg>
+        <span>UMAT Complaint Management System</span>
+      </div>
+      <p>&copy; 2026 University of Mines and Technology. All Rights Reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+        <a href="accessibility-statement.html">Accessibility</a>
+        <a href="help-center.html">Help</a>
+        <a href="system-status.html">Status</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="page-animations.js"></script>
+  <script>
+    // ── Accordion open/close with smooth height ─────────────
+    document.querySelectorAll('.fq-item').forEach(item => {
+      const btn = item.querySelector('.fq-q');
+      const panel = item.querySelector('.fq-a-panel');
+      btn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('is-open');
+        item.classList.toggle('is-open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        panel.style.maxHeight = !isOpen ? panel.scrollHeight + 'px' : null;
+      });
+    });
+
+    // ── Category filter ──────────────────────────────────────
+    const catBtns = document.querySelectorAll('.fq-cat-btn');
+    const groups = document.querySelectorAll('.fq-group');
+    const items = document.querySelectorAll('.fq-item');
+    const noMatch = document.getElementById('fqNoMatch');
+
+    function applyCategory(cat) {
+      let visibleCount = 0;
+      groups.forEach(group => {
+        const groupItems = group.querySelectorAll('.fq-item');
+        let groupVisible = 0;
+        groupItems.forEach(item => {
+          const match = cat === 'all' || item.dataset.cat === cat;
+          item.style.display = match ? '' : 'none';
+          if (match) groupVisible++;
+        });
+        group.style.display = groupVisible ? '' : 'none';
+        visibleCount += groupVisible;
+      });
+      noMatch.classList.toggle('show', visibleCount === 0);
+    }
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catBtns.forEach(b => b.classList.toggle('active', b === btn));
+        applyCategory(btn.dataset.cat);
+        document.getElementById('fqSearch').value = '';
+      });
+    });
+
+    // ── Live search ──────────────────────────────────────────
+    const searchInput = document.getElementById('fqSearch');
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      if (term === '') {
+        catBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
+        applyCategory('all');
+        return;
+      }
+
+      catBtns.forEach(b => b.classList.remove('active'));
+      groups.forEach(group => {
+        const groupItems = group.querySelectorAll('.fq-item');
+        let groupVisible = 0;
+        groupItems.forEach(item => {
+          const text = item.querySelector('.fq-q-text').textContent.toLowerCase();
+          const ans = item.querySelector('.fq-a-inner').textContent.toLowerCase();
+          const match = text.includes(term) || ans.includes(term);
+          item.style.display = match ? '' : 'none';
+          if (match) groupVisible++;
+        });
+        group.style.display = groupVisible ? '' : 'none';
+        visibleCount += groupVisible;
+      });
+      noMatch.classList.toggle('show', visibleCount === 0);
+    });
+  </script>
+</body>
+</html>

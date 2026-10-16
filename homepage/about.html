@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us – UMAT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="page-animations.css">
+  <style>
+    .ab-hero::before {
+      background-image: url('umat-administration2.jpg');
+      background-position: center;
+      opacity: .18;
+    
+    }
+    .ph-hero{
+      height: 36vh;
+    }
+
+    .ab-hero {
+      isolation: isolate;
+      background:
+        linear-gradient(135deg, rgba(6,54,38,.98) 0%, rgba(7,92,69,.96) 48%, rgba(15,143,120,.94) 100%);
+    }
+
+    .ab-hero::after {
+      content: "";
+      position: absolute;
+      inset: -38% -18%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .62;
+      background:
+        radial-gradient(ellipse at 18% 42%, rgba(105,255,205,.26) 0 8%, transparent 28%),
+        radial-gradient(ellipse at 72% 30%, rgba(245,189,47,.18) 0 9%, transparent 26%),
+        radial-gradient(ellipse at 54% 76%, rgba(255,255,255,.15) 0 7%, transparent 25%),
+        repeating-radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.12) 0 2px, transparent 3px 18px);
+      filter: blur(14px) saturate(145%);
+      mix-blend-mode: screen;
+      animation: abLiquidShake 2.6s ease-in-out infinite;
+      transform-origin: center;
+    }
+    
+    .ab-hero .ph-bubbles {
+      animation: none;
+      z-index: 1;
+    }
+    .ab-hero .ph-bubbles span {
+      animation-name: abBubbleVertical;
+    }
+
+    @keyframes abLiquidShake {
+      0%, 100% {
+        transform: translate3d(-1.5%, -1%, 0) rotate(-1deg) scale(1.05);
+        background-position: 0 0, 20px -12px, -26px 18px, 0 0;
+      }
+      18% {
+        transform: translate3d(1.7%, .8%, 0) rotate(1.2deg) scale(1.08);
+      }
+      36% {
+        transform: translate3d(-.8%, 1.5%, 0) rotate(-.7deg) scale(1.06);
+        background-position: 26px 14px, -18px 22px, 16px -20px, 34px 16px;
+      }
+      58% {
+        transform: translate3d(1.3%, -1.4%, 0) rotate(.9deg) scale(1.09);
+      }
+      76% {
+        transform: translate3d(-1.8%, .5%, 0) rotate(-1.1deg) scale(1.07);
+        background-position: -18px 28px, 12px -16px, -30px 10px, -24px 30px;
+      }
+    }
+
+    @keyframes abLiquidSurface {
+      0%, 100% { transform: translate3d(0, 0, 0) skewX(0deg); }
+      25% { transform: translate3d(8px, -2px, 0) skewX(-1.4deg); }
+      50% { transform: translate3d(-7px, 2px, 0) skewX(1.2deg); }
+      75% { transform: translate3d(5px, -1px, 0) skewX(-.8deg); }
+    }
+    @keyframes abBubbleVertical {
+      0%  { transform: translate3d(0,0,0) scale(.8); opacity:0; }
+      15% { opacity:.5; }
+      80% { opacity:.3; }
+      100%{ transform: translate3d(0,-80vh,0) scale(1.1); opacity:0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ab-hero::after,
+      .ab-hero .ph-bubbles,
+      .ab-team-avatar,
+      .ab-team-avatar::before,
+      .ab-team-avatar::after {
+        animation: none !important;
+      }
+    }
+
+    .ab-hero-icon {
+      width: 70px; height: 60px; margin-left: auto;
+      position: relative;
+      top: -24px;
+      border: 2px solid rgba(255,255,255,.26); border-radius: 24px;
+      background: rgba(255,255,255,.13); backdrop-filter: blur(14px);
+      display: grid; place-items: center; color: #fff; flex-shrink: 0;
+      animation: phFadeUp .7s ease .2s both;
+      
+
+    }
+    .ab-hero-icon svg {
+       width: 52px; height: 52px;
+      }
+
+    .ab-hero-flex { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; 
+      transform: translateY(-50px);
+    }
+    .ab-hero-flex > div:first-child {
+      flex: 1 1 520px;
+    }
+    .ab-hero-flex > div:first-child p {
+      color: #fff;
+    }
+
+    /* ── Mission/Vision ──────────────────────────── */
+    .ab-mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .ab-mv-card {
+      background: #fff; border-radius: 18px; padding: 32px;
+      box-shadow: 0 12px 40px rgba(6,54,38,.08);
+      border-top: 4px solid var(--navy, #075c45);
+      position: relative; overflow: hidden;
+      
+    }
+    .ab-mv-card.gold { border-top-color: var(--gold, #f5bd2f); }
+    .ab-mv-icon {
+      width: 58px; height: 58px; border-radius: 14px;
+      display: grid; place-items: center; margin-bottom: 18px;
+      background: linear-gradient(135deg,#075c45,#0f8f78); color: #fff;
+    }
+    .ab-mv-card.gold .ab-mv-icon { background: linear-gradient(135deg,#f5bd2f,#e59a1c); color:#2d1e05; }
+    .ab-mv-icon svg { width: 30px; height: 30px; }
+    .ab-mv-card h3 { margin: 0 0 12px; font-size: 21px; color: #13241f; }
+    .ab-mv-card p { margin: 0; color: #60746b; line-height: 1.7; font-size: 15px; }
+
+    /* ── Story / timeline ────────────────────────── */
+    .ab-story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .ab-story-copy p { color: #60746b; line-height: 1.75; font-size: 16px; margin: 0 0 16px; }
+    .ab-story-img {
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 24px 60px rgba(6,54,38,.18);
+      position: relative;
+    }
+    .ab-story-img img { display: block; width: 100%; height: auto; transition: transform .6s ease; }
+    .ab-story-img:hover img { transform: scale(1.05); }
+
+    /* ── Stats strip ──────────────────────────────── */
+    .ab-stats {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 20px;
+      background:
+        radial-gradient(circle at 26% 28%, rgba(112,255,183,.18) 0 2.5%, transparent 2.7%),
+        radial-gradient(circle at 26% 28%, transparent 0 4.4%, rgba(112,255,183,.72) 4.6% 5%, transparent 5.2%),
+        radial-gradient(circle at 26% 28%, transparent 0 6.4%, rgba(112,255,183,.52) 6.6% 6.9%, transparent 7.1%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.035), transparent 48%),
+        linear-gradient(135deg,#001d20 0%,#013035 48%,#00151a 100%);
+      border-radius: 30px; padding: 44px 34px;
+      position: relative; overflow: hidden; isolation: isolate;
+      box-shadow: 0 24px 38px rgba(2,25,20,.22);
+    }
+    .ab-stats::before {
+      content: "";
+      position: absolute;
+      inset: -78% -22% -62% 42%;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 76% 24%, transparent 0 30%, rgba(112,255,183,.82) 30.4% 31%, transparent 31.4%),
+        radial-gradient(circle at 76% 24%, transparent 0 38%, rgba(190,255,218,.55) 38.4% 38.8%, transparent 39.2%),
+        radial-gradient(circle at 76% 24%, transparent 0 47%, rgba(20,168,102,.44) 47.3% 47.7%, transparent 48.1%),
+        repeating-radial-gradient(circle at 76% 24%, transparent 0 56px, rgba(112,255,183,.18) 58px 60px, transparent 62px 78px);
+      transform: rotate(-16deg);
+      opacity: .88;
+    }
+    .ab-stats::after {
+      content: "";
+      position: absolute;
+      left: -26%;
+      bottom: -72%;
+      width: 82%;
+      height: 150%;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 92%, transparent 0 35%, rgba(112,255,183,.74) 35.4% 35.9%, transparent 36.3%),
+        radial-gradient(circle at 12% 92%, transparent 0 45%, rgba(190,255,218,.5) 45.4% 45.8%, transparent 46.2%),
+        radial-gradient(circle at 12% 92%, transparent 0 57%, rgba(20,168,102,.36) 57.3% 57.8%, transparent 58.2%);
+      transform: rotate(9deg);
+      opacity: .82;
+    }
+    .ab-stat { text-align: center; color: #fff; position: relative; z-index:1; }
+    .ab-stat .num { font-size: clamp(28px,3.4vw,42px); font-weight: 900; color: #fff; display:block; }
+    .ab-stat .label { font-size: 13px; color: rgba(255,255,255,.78); margin-top: 6px; font-weight:700; letter-spacing:.03em; }
+
+    /* ── Values ──────────────────────────────────── */
+    .ab-values-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 22px; }
+    .ab-value-card {
+      background: #fff; border: 1px solid #d8e7df; border-radius: 16px;
+      padding: 26px 20px; text-align: center;
+    }
+    .ab-value-icon {
+      width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%;
+      display: grid; place-items: center;
+    }
+    .ab-value-icon svg { width: 30px; height: 30px; }
+    .ab-value-card:nth-child(1) .ab-value-icon { background:#d8f0e5; color:var(--navy,#075c45); }
+    .ab-value-card:nth-child(2) .ab-value-icon { background:#fff1c8; color:var(--gold-dark,#b87410); }
+    .ab-value-card:nth-child(3) .ab-value-icon { background:#d9f1f5; color:#148ca3; }
+    .ab-value-card:nth-child(4) .ab-value-icon { background:#e3f2e0; color:#3d7b35; }
+    .ab-value-card h4 { margin: 0 0 8px; font-size: 16px; color: #13241f; }
+    .ab-value-card p { margin: 0; font-size: 13.5px; color: #60746b; line-height: 1.55; }
+
+    /* ── Team ────────────────────────────────────── */
+    .ab-team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .ab-team-card {
+      background: #fff; border-radius: 18px; overflow: hidden;
+      box-shadow: 0 10px 32px rgba(6,54,38,.08); text-align: center;
+    }
+    .ab-team-avatar {
+      height: 150px;
+      background: #fff;
+      display: grid; place-items: center; color: #fff; font-size: 44px; font-weight: 800;
+      position: relative; overflow: hidden; isolation: isolate;
+      box-shadow: inset 0 -24px 42px rgba(6,54,38,.18);
+    }
+    .ab-team-avatar span {
+      position: relative;
+      z-index: 3;
+      text-shadow: 0 5px 16px rgba(0,0,0,.28);
+    }
+    .ab-team-avatar::before,
+    .ab-team-avatar::after {
+      content:""; position:absolute; pointer-events: none; z-index: 1;
+    }
+    .ab-team-avatar::before {
+      left: -12%;
+      right: -12%;
+      top: 5%;
+      bottom: -4%;
+      border-radius: 48% 52% 0 0 / 26px 30px 0 0;
+      background:
+        linear-gradient(165deg, #59d98a 0%, #13a866 42%, #075c45 100%);
+      box-shadow:
+        inset 0 18px 28px rgba(255,255,255,.16),
+        inset 0 -34px 44px rgba(6,54,38,.35);
+      animation: abTeamWaterBody 6.8s ease-in-out infinite;
+    }
+    .ab-team-avatar::after {
+      width: 136%;
+      height: 44px;
+      left: -18%;
+      top: calc(5% - 22px);
+      border-radius: 50%;
+      background:
+        rgba(255,255,255,.88),
+        linear-gradient(90deg, transparent, rgba(166,255,200,.55), transparent);
+      box-shadow:
+        0 12px 0 rgba(157,255,188,.46),
+        0 18px 24px rgba(6,54,38,.18);
+      opacity: .92;
+      animation: abTeamWaterSurface 5.2s ease-in-out infinite;
+    }
+    @keyframes abTeamWaterBody {
+      0%, 100% { transform: translate3d(-2%, -1px, 0) rotate(1deg); }
+      50% { transform: translate3d(2%, 4px, 0) rotate(-1deg); }
+    }
+    @keyframes abTeamWaterSurface {
+      0%, 100% { transform: translate3d(-5%, -1px, 0) rotate(1.2deg); }
+      50% { transform: translate3d(5%, 5px, 0) rotate(-1.2deg); }
+    }
+    .ab-team-body { padding: 18px 16px 22px; }
+    .ab-team-body h4 { margin: 0 0 4px; font-size: 15.5px; color: #13241f; }
+    .ab-team-body span { font-size: 12.5px; color: #60746b; font-weight: 700; }
+
+    /* ── CTA ─────────────────────────────────────── */
+    .ab-cta {
+      background:
+        radial-gradient(circle at 50% 52%, rgba(2,57,40,.28) 0 29%, transparent 29.4%),
+        radial-gradient(circle at 50% 52%, transparent 0 39%, rgba(45,205,143,.3) 39.4% 48%, transparent 48.5%),
+        radial-gradient(circle at 50% 52%, transparent 0 58%, rgba(2,76,57,.36) 58.4% 66%, transparent 66.5%),
+        linear-gradient(125deg, transparent 0 10%, rgba(54,222,156,.22) 10.5% 15%, transparent 15.5% 100%),
+        linear-gradient(40deg, transparent 0 74%, rgba(54,222,156,.18) 74.5% 79%, transparent 79.5% 100%),
+        linear-gradient(135deg,#063626 0%,#075c45 48%,#0f8f78 100%);
+      border-radius: 24px; padding: 52px 40px; text-align: center; color: #fff;
+      position: relative; overflow: hidden;
+      box-shadow: 0 20px 34px rgba(6,54,38,.24);
+      isolation: isolate;
+    }
+    .ab-cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.12), transparent 42%),
+        radial-gradient(ellipse at 50% 100%, rgba(255,255,255,.12), transparent 58%);
+    }
+    .ab-cta::after {
+      content: "";
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      bottom: -14px;
+      height: 28px;
+      z-index: 0;
+      pointer-events: none;
+      border-radius: 50%;
+      background: rgba(7,92,69,.34);
+      filter: blur(10px);
+    }
+    .ab-cta h2,
+    .ab-cta p,
+    .ab-cta-actions {
+      position: relative;
+      z-index: 1;
+    }
+    .ab-cta h2 { margin: 0 0 12px; font-size: clamp(24px,3vw,34px); }
+    .ab-cta p { margin: 0 0 26px; color: rgba(255,255,255,.84); max-width: 540px; margin-inline:auto; }
+    .ab-cta-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .ab-cta-btn {
+      min-width: 200px; min-height: 54px; border-radius: 10px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      font-weight: 800; font-size: 15px;
+    }
+    .ab-cta-btn.solid { background: linear-gradient(135deg,#f5bd2f,#e59a1c); color:#2d1e05; box-shadow:0 14px 28px rgba(184,116,16,.3); }
+    .ab-cta-btn.outline { border:1.5px solid rgba(255,255,255,.4); color:#fff; background:rgba(255,255,255,.08); backdrop-filter:blur(8px); }
+    .ab-cta-btn svg { width:18px; height:18px; }
+
+    @media (max-width: 980px) {
+      .ab-mv-grid, .ab-story-grid { grid-template-columns: 1fr; }
+      .ab-stats { grid-template-columns: repeat(2,1fr); }
+      .ab-values-grid, .ab-team-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 600px) {
+      .ab-stats { grid-template-columns: 1fr 1fr; padding: 28px 18px; gap:24px 12px; }
+      .ab-values-grid, .ab-team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <header class="site-header">
+    
+  </header>
+
+  <!-- ── HERO ────────────────────────────────────── -->
+  <section class="ph-hero ab-hero">
+    <div class="ph-bubbles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container ph-hero-inner ab-hero-flex">
+      <div>
+        <div class="ph-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z"/></svg>
+          About The Platform
+        </div>
+        <h1>About Us</h1>
+        <p>Learn about the mission behind the UMAT Complaint Management System and how we're building a more transparent and responsive student experience.</p>
+      </div>
+      <div class="ab-hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Zm3.8 5.5 1.4 1.4-5.8 5.8-3.1-3.1 1.4-1.4 1.7 1.7 4.4-4.4Z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="ph-breadcrumb">
+    <div class="container"><a href="homepage.html">Home</a><span>›</span><strong>About Us</strong></div>
+  </div>
+
+  <!-- ── STORY ───────────────────────────────────── -->
+  <section class="ph-section">
+    <div class="container">
+      <div class="ab-story-grid">
+        <div class="ab-story-copy" data-reveal="left">
+          <p class="ph-kicker">Our Story</p>
+          <h2 style="margin:0 0 18px;font-size:clamp(24px,2.8vw,34px);color:#13241f;">Built for students, by people who listen</h2>
+          <p>The University of Mines and Technology Complaint Management System was created to give every student a clear, dignified channel to raise concerns — whether about academics, finances, facilities, or wellbeing.</p>
+          <p>Before this platform, complaints were often scattered across emails, hand-written notes, and word-of-mouth requests that could get lost along the way. We built a single, secure portal so nothing falls through the cracks and every voice is heard.</p>
+          <p>Today, the system routes complaints automatically to the right department, keeps students updated in real time, and protects the privacy of every individual who comes forward.</p>
+        </div>
+        <div class="ab-story-img" data-reveal="right">
+          <img src="umat-administration2.jpg" alt="UMAT Administration Block">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MISSION / VISION ────────────────────────── -->
+  <section class="ph-section alt">
+    <div class="container">
+      <div class="ph-section-head" data-reveal>
+        <p class="ph-kicker">Purpose</p>
+        <h2>Our Mission &amp; Vision</h2>
+        <span class="ph-underline"></span>
+      </div>
+      <div class="ab-mv-grid" data-reveal-group>
+        <div class="ab-mv-card ph-lift">
+          <div class="ab-mv-icon"><svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg></div>
+          <h3>Our Mission</h3>
+          <p>To provide UMAT students with a transparent, efficient, and confidential platform for raising complaints — ensuring every concern is acknowledged, investigated, and resolved promptly by the appropriate department.</p>
+        </div>
+        <div class="ab-mv-card gold ph-lift">
+          <div class="ab-mv-icon"><svg viewBox="0 0 24 24"><path d="m12 2 2.7 6.6L22 9l-5.5 4.7L18 22l-6-3.9L6 22l1.5-8.3L2 9l7.3-.4L12 2Z"/></svg></div>
+          <h3>Our Vision</h3>
+          <p>To become a model institution-wide standard for student grievance handling in Ghana — where accountability, openness, and care for students are built into every interaction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS ───────────────────────────────────── -->
+  <section class="ph-section" style="padding-top:0;">
+    <div class="container">
+      <div class="ab-stats" data-reveal="zoom">
+        <div class="ab-stat">
+          <span class="num"><span class="ph-counter" data-target="0" data-suffix="+">0</span></span>
+          <span class="label">Complaints Resolved</span>
+        </div>
+        <div class="ab-stat">
+          <span class="num"><span class="ph-counter" data-target="0" data-suffix="">0</span></span>
+          <span class="label">Departments Connected</span>
+        </div>
+        <div class="ab-stat">
+          <span class="num"><span class="ph-counter" data-target="O" data-suffix="%">0</span></span>
+          <span class="label">Satisfaction Rate</span>
+        </div>
+        <div class="ab-stat">
+          <span class="num"><span class="ph-counter" data-target="O" data-suffix="hr">0</span></span>
+          <span class="label">Avg. First Response</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VALUES ──────────────────────────────────── -->
+  <section class="ph-section alt">
+    <div class="container">
+      <div class="ph-section-head" data-reveal>
+        <p class="ph-kicker">What Drives Us</p>
+        <h2>Our Core Values</h2>
+        <span class="ph-underline"></span>
+      </div>
+      <div class="ab-values-grid" data-reveal-group>
+        <div class="ab-value-card ph-lift">
+          <div class="ab-value-icon ph-spin-hover"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Z"/></svg></div>
+          <h4>Confidentiality</h4>
+          <p>Every complaint is handled with strict privacy and protection from retaliation.</p>
+        </div>
+        <div class="ab-value-card ph-lift">
+          <div class="ab-value-icon ph-spin-hover"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5h-2v6l5.2 3.1 1-1.7-4.2-2.5V7Z"/></svg></div>
+          <h4>Timeliness</h4>
+          <p>We aim for swift acknowledgement and resolution, keeping you informed at every step.</p>
+        </div>
+        <div class="ab-value-card ph-lift">
+          <div class="ab-value-icon ph-spin-hover"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4Zm-1 4h2v6h-2V8Zm0 8h2v2h-2v-2Z"/></svg></div>
+          <h4>Transparency</h4>
+          <p>Clear status updates and honest communication throughout the entire process.</p>
+        </div>
+        <div class="ab-value-card ph-lift">
+          <div class="ab-value-icon ph-spin-hover"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.6 9 2.3 5 6 5c2 0 3.4 1.1 4 2.2C10.6 6.1 12 5 14 5c3.7 0 5.4 4 3.5 7.5C19 16.65 12 21 12 21Z"/></svg></div>
+          <h4>Student-Centered</h4>
+          <p>Designed around what students actually need: simplicity, fairness, and care.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TEAM ────────────────────────────────────── -->
+  <section class="ph-section">
+    <div class="container">
+      <div class="ph-section-head" data-reveal>
+        <p class="ph-kicker">Behind The System</p>
+        <h2>The Team Supporting You</h2>
+        <span class="ph-underline"></span>
+      </div>
+      <div class="ab-team-grid" data-reveal-group>
+        <div class="ab-team-card ph-lift">
+          <div class="ab-team-avatar"><span>SA</span></div>
+          <div class="ab-team-body"><h4>Student Affairs Office</h4><span>Complaint Oversight</span></div>
+        </div>
+        <div class="ab-team-card ph-lift">
+          <div class="ab-team-avatar"><span>AA</span></div>
+          <div class="ab-team-body"><h4>Academic Affairs</h4><span>Academic Complaints</span></div>
+        </div>
+        <div class="ab-team-card ph-lift">
+          <div class="ab-team-avatar"><span>IT</span></div>
+          <div class="ab-team-body"><h4>IT Services Unit</h4><span>Platform &amp; Support</span></div>
+        </div>
+        <div class="ab-team-card ph-lift">
+          <div class="ab-team-avatar"><span>RG</span></div>
+          <div class="ab-team-body"><h4>Registrar's Office</h4><span>Records &amp; Escalations</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────── -->
+  <section class="ph-section alt">
+    <div class="container">
+      <div class="ab-cta">
+        <h2>Ready to be heard?</h2>
+        <p>Submit a complaint today and let the right department take action — or explore our FAQs to learn how the process works.</p>
+        <div class="ab-cta-actions">
+          <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required" class="ab-cta-btn solid ph-press">
+            <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>
+            Submit a Complaint
+          </a>
+          <a href="faqs.html" class="ab-cta-btn outline ph-press">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm-1 5h2v6h-2V7Zm0 8h2v2h-2v-2Z"/></svg>
+            Read FAQs
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Zm3.8 5.5 1.4 1.4-5.8 5.8-3.1-3.1 1.4-1.4 1.7 1.7 4.4-4.4Z"/></svg>
+        <span>UMAT Complaint Management System</span>
+      </div>
+      <p>&copy; 2026 University of Mines and Technology. All Rights Reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+        <a href="accessibility-statement.html">Accessibility</a>
+        <a href="help-center.html">Help</a>
+        <a href="system-status.html">Status</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="page-animations.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+USER root
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl postgresql-client \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /app/storage/evidence /app/storage/backups /app/storage/keys \
+    && chown -R app:app /app
+WORKDIR /app
+COPY --chown=app:app docker-publish/ .
+USER app
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "ComplaintSystem.Api.dll"]

@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure UMaT staff and administrator access to the Complaint Management System.">
+  <title>Staff/Admin Login - UMaT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css?v=20260722-admin-logo-gap80">
+  <link rel="stylesheet" href="password-visibility.css?v=20260721-1">
+</head>
+<body class="admin-page admin-login-page">
+  <main class="admin-shell">
+    <div class="admin-scan-field" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+    <section class="admin-stage" aria-label="Staff and administrator login">
+      <a class="admin-logo" href="homepage.html" aria-label="Return to UMaT complaint system homepage">
+        <img src="LOGO2.png" alt="University of Mines and Technology">
+      </a>
+
+      <div class="admin-copy">
+        <p class="admin-kicker">Authorised Personnel</p>
+        <h1>Staff and administrator access</h1>
+        <p>Manage assigned complaints, coordinate departments and protect the integrity of the UMaT complaint process.</p>
+        <div class="admin-trust-row" aria-label="Portal security features">
+          <span>Role protected</span><span>Activity audited</span><span>Secure sessions</span>
+        </div>
+        <div class="admin-live-panel">
+          <div><span class="admin-live-dot" aria-hidden="true"></span><strong>Administrative portal available</strong></div>
+          <p>Access is restricted to authorised UMaT staff using an official university email address.</p>
+        </div>
+      </div>
+
+      <div class="admin-auth-grid admin-login-only">
+        <form class="admin-card admin-login-card" id="superAdminSetupForm" hidden novalidate>
+          <div class="admin-card-ribbon" aria-hidden="true"></div>
+          <div class="admin-card-head">
+            <span class="admin-card-icon" aria-hidden="true">SA</span>
+            <div><h2>Create the first Super Administrator</h2><p>This one-time form saves the account directly to the live PostgreSQL database.</p></div>
+          </div>
+
+          <div class="admin-access-panel" aria-live="polite">
+            <span>Initial system setup</span>
+            <strong>Use a real authorised UMaT staff identity. Setup closes permanently after successful creation.</strong>
+          </div>
+
+          <label class="admin-field"><span>First name</span><span class="admin-input-shell"><input id="setupFirstName" name="firstName" autocomplete="given-name" maxlength="80" required></span></label>
+          <label class="admin-field"><span>Other names (optional)</span><span class="admin-input-shell"><input id="setupOtherNames" name="otherNames" autocomplete="additional-name" maxlength="60"></span></label>
+          <label class="admin-field"><span>Last name</span><span class="admin-input-shell"><input id="setupLastName" name="lastName" autocomplete="family-name" maxlength="80" required></span></label>
+          <label class="admin-field"><span>Administrator ID (optional)</span><span class="admin-input-shell"><input id="setupAdministratorId" name="administratorId" pattern="[A-Za-z0-9-]+" maxlength="32" placeholder="For example: SA-ICT-001"></span></label>
+          <label class="admin-field"><span>Official UMaT email</span><span class="admin-input-shell"><input id="setupEmail" name="email" type="email" autocomplete="username" placeholder="staff.name@umat.edu.gh" required></span></label>
+          <label class="admin-field"><span>Telephone number</span><span class="admin-input-shell"><input id="setupPhoneNumber" name="phoneNumber" type="tel" autocomplete="tel" placeholder="+233 XX XXX XXXX" required></span></label>
+          <label class="admin-field"><span>Password</span><span class="admin-input-shell"><input id="setupPassword" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></span><small>Use at least 12 characters with uppercase, lowercase, number and symbol.</small></label>
+          <label class="admin-field"><span>Confirm password</span><span class="admin-input-shell"><input id="setupConfirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></span></label>
+
+          <button class="admin-submit" id="superAdminSetupSubmit" type="submit">Create Super Administrator</button>
+          <p class="admin-message" id="superAdminSetupMessage" role="status" aria-live="polite"></p>
+        </form>
+
+        <form class="admin-card admin-login-card" id="adminLoginForm" novalidate>
+          <div class="admin-card-ribbon" aria-hidden="true"></div>
+          <div class="admin-card-head">
+            <span class="admin-card-icon" aria-hidden="true">UA</span>
+            <div><h2>Staff/Admin Login</h2><p>Select your authorised role and enter your work credentials.</p></div>
+          </div>
+
+          <div class="admin-access-panel" aria-live="polite">
+            <span>Selected access level</span>
+            <strong id="adminRoleInfo">Administrators coordinate complaints, users, departments and reports.</strong>
+          </div>
+
+          <label class="admin-field">
+            <span>Access role</span>
+            <select id="adminLoginRole" required>
+              <option value="admin">Administrator</option>
+              <option value="super_admin">Super Administrator</option>
+              <option value="department_officer">Department Officer</option>
+            </select>
+          </label>
+
+          <label class="admin-field" id="adminLoginDepartmentField" hidden>
+            <span>Administrative Unit</span>
+            <select id="adminLoginDepartment">
+              <option value="">Select your assigned administrative unit</option>
+            </select>
+          </label>
+
+          <label class="admin-field">
+            <span id="adminLoginIdentityLabel">Official UMaT email</span>
+            <span class="admin-input-shell"><input id="adminLoginEmail" placeholder="staff.name@umat.edu.gh" autocomplete="username" required></span>
+          </label>
+
+          <label class="admin-field">
+            <span>Password</span>
+            <span class="admin-input-shell"><input id="adminLoginPassword" type="password" placeholder="Enter your password" autocomplete="current-password" minlength="8" required></span>
+          </label>
+
+          <div class="admin-login-row">
+            <label class="admin-check compact"><input type="checkbox" name="remember"><span>Remember this device</span></label>
+            <a id="staffForgotPasswordLink" href="admin-forgot-password.html">Forgot password?</a>
+          </div>
+
+          <button class="admin-submit admin-submit-outline" id="adminLoginSubmit" type="submit">Sign in securely</button>
+          <p class="admin-message" id="adminLoginMessage" role="status" aria-live="polite"></p>
+
+          <div class="admin-card-metrics" aria-label="Security information">
+            <span><strong>3</strong> access roles</span><span><strong>GMT</strong> session time</span><span><strong>100%</strong> audited</span>
+          </div>
+          <p class="admin-return">Student account? <a href="login.html">Open student login</a></p>
+        </form>
+
+        <form class="admin-card admin-login-card" id="staffTwoFactorForm" hidden novalidate>
+          <div class="admin-card-ribbon" aria-hidden="true"></div>
+          <div class="admin-card-head"><span class="admin-card-icon" aria-hidden="true">2FA</span><div><h2>Two-factor authentication</h2><p id="staffTwoFactorInstructions">Enter the code from your authenticator application.</p></div></div>
+          <div class="admin-access-panel" id="staffTwoFactorKeyPanel" hidden><span>Authenticator setup key</span><strong id="staffTwoFactorKey"></strong></div>
+          <label class="admin-field"><span>Authentication code</span><span class="admin-input-shell"><input id="staffTwoFactorCode" inputmode="numeric" autocomplete="one-time-code" minlength="6" maxlength="8" required></span></label>
+          <button class="admin-submit" id="staffTwoFactorSubmit" type="submit">Complete secure sign-in</button>
+          <p class="admin-message" id="staffTwoFactorMessage" role="status" aria-live="polite"></p>
+          <button class="admin-submit admin-submit-outline" id="staffTwoFactorCancel" type="button">Return to login</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <script src="app.js?v=20260722-access-as-no-department-field"></script>
+  <script src="password-visibility.js?v=20260721-1"></script>
+</body>
+</html>

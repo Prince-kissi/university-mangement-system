@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Successful - UMaT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+</head>
+<body class="flow-page registration-success-page">
+  <main class="flow-shell">
+    <section class="flow-layout" aria-label="Registration successful page">
+      <a href="homepage.html" class="flow-logo" aria-label="Back to homepage">
+        <img src="LOGO2.png" alt="UMaT — University of Mines and Technology">
+      </a>
+
+      <div class="flow-copy">
+        <div class="flow-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm-1.1 14.2-3.6-3.6 1.4-1.4 2.2 2.2 4.9-4.9 1.4 1.4-6.3 6.3Z"/></svg>
+          Account Created
+        </div>
+        <h1>Your student complaint account is ready</h1>
+        <p>Your registration has been completed successfully. You can now access the UMaT Complaint Management System and manage your complaints securely.</p>
+      </div>
+
+      <section class="flow-card registration-success-card" role="status" aria-live="polite">
+        <div class="registration-success-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M20.3 6.7 9 18l-5.3-5.3 1.4-1.4L9 15.2 18.9 5.3l1.4 1.4Z"/></svg>
+        </div>
+        <p class="registration-success-kicker">Registration complete</p>
+        <h2>Registration Successful!</h2>
+        <p>Your account has been created. Use your reference number and password to sign in.</p>
+
+        <div class="registration-success-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-6h2v6Zm0-8h-2V7h2v2Z"/></svg>
+          <span>Keep your login details secure and do not share your password.</span>
+        </div>
+
+        <a class="flow-submit registration-success-primary" href="homepage.html#login">Continue to Student Login</a>
+        <a class="registration-success-secondary" href="homepage.html">Return to Homepage</a>
+      </section>
+    </section>
+  </main>
+  <script>
+    const transferredProfile = location.hash.startsWith('#profile=')
+      ? location.hash.slice('#profile='.length)
+      : '';
+    const studentLoginLink = document.querySelector('.registration-success-primary');
+    if (transferredProfile && studentLoginLink) {
+      studentLoginLink.href = `homepage.html?profile=${transferredProfile}#login`;
+    }
+  </script>
+</body>
+</html>

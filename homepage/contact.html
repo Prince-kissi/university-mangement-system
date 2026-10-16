@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – UMAT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="page-animations.css">
+  <style>
+    .ct-hero::before {
+      background-image: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=60');
+    }
+
+.ct-hero{
+  height:  46vh;
+}
+
+    .ct-hero-icon {
+      width: 96px; height: 96px; margin-left: auto;
+      border: 2px solid rgba(255,255,255,.26); border-radius: 24px;
+      background: rgba(255,255,255,.13); backdrop-filter: blur(14px);
+      display: grid; place-items: center; color: #fff; flex-shrink: 0;
+      animation: phFadeUp .7s ease .2s both;
+    }
+    .ct-hero-icon svg { width: 52px; height: 52px; }
+    .ct-hero-flex { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .ct-hero-flex > div:first-child p { color: #fff; }
+
+    /* ── Quick contact cards ─────────────────────── */
+    .ct-quick-wrap { margin-top: -56px; position: relative; z-index: 3; }
+    .ct-quick-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    .ct-quick-card {
+      background: #fff; border-radius: 16px; padding: 24px 20px;
+      box-shadow: 0 20px 48px rgba(6,54,38,.14);
+      text-align: center;
+      transition: transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease;
+    }
+    .ct-quick-card:hover { transform: translateY(-8px); box-shadow: 0 28px 60px rgba(6,54,38,.2); }
+    .ct-quick-icon {
+      width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg,#075c45,#0f8f78); color: #fff;
+      transition: transform .35s ease;
+    }
+    .ct-quick-card:hover .ct-quick-icon { transform: rotate(-10deg) scale(1.08); }
+    .ct-quick-icon svg { width: 26px; height: 26px; }
+    .ct-quick-card h4 { margin: 0 0 6px; font-size: 14.5px; color: #13241f; }
+    .ct-quick-card p { margin: 0; font-size: 13px; color: #60746b; line-height: 1.5; }
+    .ct-quick-card a { color: #075c45; font-weight: 800; }
+
+    /* ── Main grid: form + info ──────────────────── */
+    .ct-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 36px; align-items: start; }
+
+    .ct-form-card {
+      background: #fff; border-radius: 20px; padding: 34px;
+      box-shadow: 0 12px 48px rgba(6,54,38,.08);
+    }
+    .ct-form-card h2 { margin: 0 0 6px; font-size: 23px; color: #13241f; }
+    .ct-form-card > p { margin: 0 0 26px; color: #60746b; font-size: 14.5px; }
+
+    .ct-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .ph-input-wrap {
+      border: 1.5px solid #d8e7df; border-radius: 11px;
+      background: #fafcfa; margin-bottom: 18px;
+      transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+    .ph-input-wrap.is-focused {
+      border-color: #0f8f78; box-shadow: 0 0 0 4px rgba(15,143,120,.12); background: #fff;
+    }
+    .ph-input-wrap label {
+      display: block; font-size: 12.5px; font-weight: 800; color: #075c45;
+      padding: 10px 14px 0;
+    }
+    .ph-input-wrap input,
+    .ph-input-wrap select,
+    .ph-input-wrap textarea {
+      width: 100%; border: 0; outline: 0; background: transparent;
+      font: inherit; font-size: 14.5px; color: #13241f;
+      padding: 4px 14px 12px;
+    }
+    .ph-input-wrap textarea { min-height: 120px; resize: vertical; }
+
+    .ct-submit {
+      width: 100%; min-height: 54px; border: 0; border-radius: 12px;
+      background: linear-gradient(135deg,#075c45,#0f8f78); color: #fff;
+      font: inherit; font-size: 16px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 14px 30px rgba(6,54,38,.22);
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .ct-submit:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .ct-submit svg { width: 19px; height: 19px; transition: transform .3s ease; }
+    .ct-submit:hover svg { transform: translateX(4px); }
+
+    .ct-success {
+      display: none; margin-top: 18px; padding: 16px 18px;
+      border: 1.5px solid #b5d4c4; border-radius: 12px;
+      background: linear-gradient(135deg,#edf7f1,#f4fbf6);
+      gap: 12px; align-items: center;
+    }
+    .ct-success.show { display: flex; animation: ctPop .4s ease; }
+    @keyframes ctPop { from{opacity:0;transform:scale(.94)} to{opacity:1;transform:scale(1)} }
+    .ct-success-icon {
+      width: 36px; height: 36px; border-radius: 50%; background: #075c45;
+      display: grid; place-items: center; color: #fff; flex-shrink: 0;
+    }
+    .ct-success-icon svg { width: 18px; height: 18px; }
+    .ct-success strong { display: block; font-size: 14px; color: #063626; }
+    .ct-success span { font-size: 12.5px; color: #60746b; }
+
+    /* ── Info side ────────────────────────────────── */
+    .ct-info-card {
+      background: linear-gradient(135deg,#063626,#075c45 60%,#0f8f78);
+      border-radius: 20px; padding: 32px; color: #fff;
+      position: relative; overflow: hidden; margin-bottom: 22px;
+    }
+    .ct-info-card::before {
+      content: ""; position: absolute; top: -40px; right: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: rgba(255,255,255,.07);
+    }
+    .ct-info-card h3 { margin: 0 0 18px; font-size: 18px; position: relative; }
+    .ct-info-row {
+      display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px;
+      position: relative;
+    }
+    .ct-info-row:last-child { margin-bottom: 0; }
+    .ct-info-row-icon {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(255,255,255,.16); display: grid; place-items: center;
+    }
+    .ct-info-row-icon svg { width: 19px; height: 19px; }
+    .ct-info-row strong { display: block; font-size: 13.5px; margin-bottom: 2px; }
+    .ct-info-row span, .ct-info-row a { font-size: 13px; color: rgba(255,255,255,.82); line-height: 1.5; }
+
+    .ct-hours-card {
+      background: #fff; border-radius: 18px; padding: 26px;
+      box-shadow: 0 10px 32px rgba(6,54,38,.08);
+    }
+    .ct-hours-card h3 { margin: 0 0 16px; font-size: 16px; color: #13241f; }
+    .ct-hours-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px dashed #e3eee8;
+      font-size: 13.5px; color: #2e4a3d;
+    }
+    .ct-hours-row:last-child { border-bottom: 0; }
+    .ct-hours-row span:last-child { font-weight: 800; color: #075c45; }
+    .ct-status-live {
+      display: inline-flex; align-items: center; gap: 7px;
+      margin-top: 14px; padding: 8px 14px; border-radius: 999px;
+      background: #edf7f1; font-size: 12.5px; font-weight: 800; color: #075c45;
+    }
+    .ct-status-live .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #4caf50;
+      animation: ctLivePulse 1.6s ease infinite;
+    }
+    @keyframes ctLivePulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,.5); }
+      50% { box-shadow: 0 0 0 6px rgba(76,175,80,0); }
+    }
+
+    /* ── Map ─────────────────────────────────────── */
+    .ct-map-wrap { margin-top: 56px; border-radius: 22px; overflow: hidden; box-shadow: 0 16px 48px rgba(6,54,38,.14); }
+    .ct-map-frame { display: block; width: 100%; height: 340px; border: 0; filter: grayscale(.15) saturate(1.1); }
+
+    @media (max-width: 980px) {
+      .ct-quick-grid { grid-template-columns: repeat(2,1fr); }
+      .ct-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .ct-quick-grid { grid-template-columns: 1fr; }
+      .ct-row { grid-template-columns: 1fr; }
+      .ct-form-card { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <header class="site-header">
+    
+  </header>
+
+  <!-- ── HERO ────────────────────────────────────── -->
+  <section class="ph-hero ct-hero" style="padding-bottom: 110px;">
+    <div class="ph-bubbles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container ph-hero-inner ct-hero-flex">
+      <div>
+        <div class="ph-badge">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg>
+          Get In Touch
+        </div>
+        <h1>Contact Us</h1>
+        <p>Have a question that's not covered by the complaint system? Reach out to our team directly — we're here to help.</p>
+      </div>
+      <div class="ct-hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.3 8 5.1 8-5.1V7l-8 5.1L4 7v1.3Z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUICK CONTACT CARDS ─────────────────────── -->
+  <div class="container ct-quick-wrap">
+    <div class="ct-quick-grid" data-reveal-group>
+      <div class="ct-quick-card">
+        <div class="ct-quick-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.3 8 5.1 8-5.1V7l-8 5.1L4 7v1.3Z"/></svg></div>
+        <h4>Email Us</h4>
+        <p><a href="mailto:registrar@umat.edu.gh">registrar@umat.edu.gh</a></p>
+      </div>
+      <div class="ct-quick-card">
+        <div class="ct-quick-icon"><svg viewBox="0 0 24 24"><path d="M6.6 2.5 9.7 5.6c.7.7.7 1.8.1 2.6l-1.4 1.7c1.4 2.6 3.5 4.7 6.1 6.1l1.7-1.4c.8-.6 1.9-.6 2.6.1l3.1 3.1c.6.6.7 1.6.2 2.3-.9 1.3-2.2 2-3.8 2C9.4 22.1 1.9 14.6 1.9 5.7c0-1.6.7-2.9 2-3.8.7-.5 1.7-.4 2.3.2l.4.4Z"/></svg></div>
+        <h4>Call Us</h4>
+        <p><a href="tel:+233312320324">+233 (0)312 320 324</a></p>
+      </div>
+      <div class="ct-quick-card">
+        <div class="ct-quick-icon"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 6 3 11c0 7 9 11 9 11s9-4 9-11c0-5-4-9-9-9Zm0 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg></div>
+        <h4>Visit Us</h4>
+        <p>UMAT Administration Block, Tarkwa</p>
+      </div>
+      <div class="ct-quick-card">
+        <div class="ct-quick-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm1 5h-2v6l5.2 3.1 1-1.7-4.2-2.5V7Z"/></svg></div>
+        <h4>Office Hours</h4>
+        <p>Mon–Fri, 8:00am – 5:00pm</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ph-breadcrumb" style="margin-top:44px;">
+    <div class="container"><a href="homepage.html">Home</a><span>›</span><strong>Contact Us</strong></div>
+  </div>
+
+  <!-- ── BODY ───────────────────────────────────── -->
+  <section class="ph-section">
+    <div class="container">
+      <div class="ct-grid">
+
+        <!-- Form -->
+        <div class="ct-form-card" data-reveal="left">
+          <h2>Send Us a Message</h2>
+          <p>Fill out the form and our team will get back to you within 1–2 working days.</p>
+
+          <form id="contactForm" novalidate>
+            <div class="ct-row">
+              <label class="ph-input-wrap">
+                <span style="display:block;font-size:12.5px;font-weight:800;color:#075c45;padding:10px 14px 0;">Full Name</span>
+                <input type="text" name="name" placeholder="Enter your name" required>
+              </label>
+              <label class="ph-input-wrap">
+                <span style="display:block;font-size:12.5px;font-weight:800;color:#075c45;padding:10px 14px 0;">Email Address</span>
+                <input type="email" name="email" placeholder="you@example.com" required>
+              </label>
+            </div>
+            <label class="ph-input-wrap">
+              <span style="display:block;font-size:12.5px;font-weight:800;color:#075c45;padding:10px 14px 0;">Subject</span>
+              <select name="subject" required>
+                <option value="" disabled selected>What is this about?</option>
+                <option>General Inquiry</option>
+                <option>Technical Support</option>
+                <option>Complaint Process Question</option>
+                <option>Feedback / Suggestion</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label class="ph-input-wrap">
+              <span style="display:block;font-size:12.5px;font-weight:800;color:#075c45;padding:10px 14px 0;">Message</span>
+              <textarea name="message" placeholder="Write your message here…" required></textarea>
+            </label>
+
+            <button type="submit" class="ct-submit">
+              <span>Send Message</span>
+              <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7Z"/></svg>
+            </button>
+
+            <div class="ct-success" id="contactSuccess">
+              <div class="ct-success-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5 1.4-1.4L9 14.2 18.6 4.6 20 6Z"/></svg></div>
+              <div>
+                <strong>Message sent successfully!</strong>
+                <span>We'll get back to you within 1–2 working days.</span>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Info -->
+        <div data-reveal="right">
+          <div class="ct-info-card">
+            <h3>Contact Information</h3>
+            <div class="ct-info-row">
+              <div class="ct-info-row-icon"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 6 3 11c0 7 9 11 9 11s9-4 9-11c0-5-4-9-9-9Zm0 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg></div>
+              <div><strong>Address</strong><span>University of Mines and Technology, Tarkwa, Western Region, Ghana</span></div>
+            </div>
+            <div class="ct-info-row">
+              <div class="ct-info-row-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.3 8 5.1 8-5.1V7l-8 5.1L4 7v1.3Z"/></svg></div>
+              <div><strong>Email</strong><a href="mailto:registrar@umat.edu.gh">registrar@umat.edu.gh</a></div>
+            </div>
+            <div class="ct-info-row">
+              <div class="ct-info-row-icon"><svg viewBox="0 0 24 24"><path d="M6.6 2.5 9.7 5.6c.7.7.7 1.8.1 2.6l-1.4 1.7c1.4 2.6 3.5 4.7 6.1 6.1l1.7-1.4c.8-.6 1.9-.6 2.6.1l3.1 3.1c.6.6.7 1.6.2 2.3-.9 1.3-2.2 2-3.8 2C9.4 22.1 1.9 14.6 1.9 5.7c0-1.6.7-2.9 2-3.8.7-.5 1.7-.4 2.3.2l.4.4Z"/></svg></div>
+              <div><strong>Phone</strong><span>+233 (0)312 320 324 / 320 280</span></div>
+            </div>
+          </div>
+
+          <div class="ct-hours-card">
+            <h3>Office Hours</h3>
+            <div class="ct-hours-row"><span>Monday – Friday</span><span>8:00am – 5:00pm</span></div>
+            <div class="ct-hours-row"><span>Saturday</span><span>9:00am – 1:00pm</span></div>
+            <div class="ct-hours-row"><span>Sunday</span><span>Closed</span></div>
+            <div class="ct-status-live"><span class="dot"></span> Office is currently open</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Map -->
+      <div class="ct-map-wrap" data-reveal="zoom">
+        <iframe class="ct-map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=University+of+Mines+and+Technology+Tarkwa&output=embed">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Zm3.8 5.5 1.4 1.4-5.8 5.8-3.1-3.1 1.4-1.4 1.7 1.7 4.4-4.4Z"/></svg>
+        <span>UMAT Complaint Management System</span>
+      </div>
+      <p>&copy; 2026 University of Mines and Technology. All Rights Reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+        <a href="accessibility-statement.html">Accessibility</a>
+        <a href="help-center.html">Help</a>
+        <a href="system-status.html">Status</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="page-animations.js"></script>
+  <script>
+    const contactForm = document.getElementById('contactForm');
+    const contactSuccess = document.getElementById('contactSuccess');
+    if (contactForm) {
+      contactForm.addEventListener('submit', e => {
+        e.preventDefault();
+        contactSuccess.classList.add('show');
+        contactForm.reset();
+        contactSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  </script>
+</body>
+</html>

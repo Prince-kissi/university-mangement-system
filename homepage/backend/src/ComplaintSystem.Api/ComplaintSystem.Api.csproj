@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <Compile Remove="Program.cs" />
+    <Compile Remove="Controllers\AuthController.cs" />
+    <Compile Remove="Controllers\ComplaintsController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComplaintSystem.Application\ComplaintSystem.Application.csproj" />
+    <ProjectReference Include="..\ComplaintSystem.Infrastructure\ComplaintSystem.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Compile Remove="DependencyInjection.cs" />
+    <Compile Remove="Identity\ApplicationUser.cs" />
+    <Compile Remove="Options\SystemOptions.cs" />
+    <Compile Remove="Persistence\DatabaseSeeder.cs" />
+    <Compile Remove="Persistence\Migrations\ApplicationDbContextModelSnapshot-DESKTOP-0JEMNF8.cs" />
+    <Compile Remove="Services\AuthenticationService.cs" />
+    <Compile Remove="Services\ComplaintService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComplaintSystem.Application\ComplaintSystem.Application.csproj" />
+    <ProjectReference Include="..\ComplaintSystem.Domain\ComplaintSystem.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="ClosedXML" />
+    <PackageReference Include="Google.Apis.Auth" />
+    <PackageReference Include="BCrypt.Net-Next" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+</Project>

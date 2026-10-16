@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Compile Remove="Abstractions\ServiceInterfaces.cs" />
+    <Compile Remove="Contracts\AuthContracts.cs" />
+    <Compile Remove="Contracts\ComplaintContracts.cs" />
+    <Compile Remove="Validation\AdminValidators.cs" />
+    <Compile Remove="Validation\AuthValidators.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComplaintSystem.Domain\ComplaintSystem.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Complaint &ndash; UMaT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <style>
+    /* -- Base -------------------------------------- */
+    .tc-page { min-height: 100vh; background: #f4fbf6; }
+
+    /* -- Hero -------------------------------------- */
+    .tc-hero {
+      position: relative;
+      background: linear-gradient(135deg, #063626 0%, #075c45 55%, #0f8f78 100%);
+      overflow: hidden;
+      padding: 56px 0 48px;
+    }
+    .tc-hero::before {
+      content:""; position:absolute; inset:0;
+      background: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=60') center/cover;
+      opacity:.08;
+    }
+    .tc-hero-bubbles { position:absolute; inset:0; pointer-events:none; }
+    .tc-hero-bubbles span {
+      position:absolute; bottom:-30px;
+      width:var(--s); height:var(--s); left:var(--l);
+      border-radius:50%; border:1px solid rgba(255,255,255,.24);
+      background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.5),rgba(255,255,255,.05) 68%);
+      animation:tcBub var(--d) linear infinite; animation-delay:var(--dl); opacity:0;
+    }
+    .tc-hero-bubbles span:nth-child(1){--l:5%;  --s:12px;--d:9s; --dl:0s;}
+    .tc-hero-bubbles span:nth-child(2){--l:22%; --s:20px;--d:12s;--dl:-3s;}
+    .tc-hero-bubbles span:nth-child(3){--l:40%; --s:9px; --d:8s; --dl:-6s;}
+    .tc-hero-bubbles span:nth-child(4){--l:58%; --s:16px;--d:11s;--dl:-2s;}
+    .tc-hero-bubbles span:nth-child(5){--l:74%; --s:11px;--d:9s; --dl:-5s;}
+    .tc-hero-bubbles span:nth-child(6){--l:88%; --s:22px;--d:13s;--dl:-4s;}
+    @keyframes tcBub {
+      0%  { transform:translate3d(0,0,0)scale(.8); opacity:0; }
+      15% { opacity:.5; } 80% { opacity:.3; }
+      100%{ transform:translate3d(18px,-80vh,0)scale(1.1); opacity:0; }
+    }
+    .tc-hero-inner {
+      position:relative; z-index:1;
+      display:flex; align-items:center; gap:28px; flex-wrap:wrap;
+    }
+    .tc-hero-badge {
+      display:inline-flex; align-items:center; gap:9px;
+      padding:7px 16px; border:1px solid rgba(255,255,255,.28);
+      border-radius:999px; background:rgba(255,255,255,.12);
+      backdrop-filter:blur(10px); color:#bdf8ff;
+      font-size:13px; font-weight:800; margin-bottom:14px;
+    }
+    .tc-hero-badge svg { width:15px; height:15px; }
+    .tc-hero-text h1 { margin:0; color:#fff; font-size:clamp(30px,4vw,52px); line-height:1.1; }
+    .tc-hero-text p  { margin:10px 0 0; color:rgba(255,255,255,.82); font-size:17px; line-height:1.55; max-width:560px; }
+    .tc-hero-icon {
+      margin-left:auto; width:96px; height:96px;
+      border:2px solid rgba(255,255,255,.26); border-radius:24px;
+      background:rgba(255,255,255,.13); backdrop-filter:blur(14px);
+      display:grid; place-items:center; color:#fff; flex-shrink:0;
+    }
+    .tc-hero-icon svg { width:52px; height:52px; }
+
+    /* -- Breadcrumb -------------------------------- */
+    .tc-breadcrumb {
+      background:#fff; border-bottom:1px solid #d8e7df;
+      padding:13px 0; font-size:14px; color:#60746b;
+    }
+    .tc-breadcrumb a { color:#075c45; font-weight:700; }
+    .tc-breadcrumb span { margin:0 8px; }
+
+    /* -- Body -------------------------------------- */
+    .tc-body { padding:48px 0 72px; }
+    .tc-grid {
+      display:grid;
+      grid-template-columns: minmax(0,1fr) 320px;
+      gap:32px; align-items:start;
+    }
+
+    /* -- Search Card ------------------------------- */
+    .tc-search-card {
+      background:#fff; border-radius:20px;
+      box-shadow:0 12px 48px rgba(6,54,38,.10); overflow:hidden;
+    }
+    .tc-search-header {
+      padding:28px 32px 22px;
+      background:linear-gradient(135deg,#075c45,#0f8f78);
+      color:#fff; display:flex; align-items:center; gap:14px;
+    }
+    .tc-search-header-icon {
+      width:48px; height:48px; border-radius:12px;
+      background:rgba(255,255,255,.18);
+      display:grid; place-items:center; flex-shrink:0;
+    }
+    .tc-search-header-icon svg { width:26px; height:26px; }
+    .tc-search-header h2 { margin:0; font-size:21px; }
+    .tc-search-header p  { margin:5px 0 0; font-size:14px; color:rgba(255,255,255,.8); }
+
+    .tc-search-body { padding:28px 32px 32px; }
+    .tc-search-intro { font-size:15px; color:#60746b; margin:0 0 24px; line-height:1.6; }
+
+    .tc-search-row {
+      display:flex; gap:12px; align-items:stretch; flex-wrap:wrap;
+    }
+    .tc-search-input-wrap {
+      flex:1; min-width:200px;
+      display:flex; align-items:center; gap:12px;
+      border:1.5px solid #d8e7df; border-radius:12px;
+      background:#fafcfa; padding:0 16px;
+      transition:.2s;
+    }
+    .tc-search-input-wrap:focus-within {
+      border-color:#0f8f78;
+      box-shadow:0 0 0 4px rgba(15,143,120,.12);
+      background:#fff;
+    }
+    .tc-search-input-wrap svg { width:20px; height:20px; color:#60746b; flex-shrink:0; }
+    .tc-search-input-wrap input {
+      flex:1; border:0; outline:0; background:0;
+      font:inherit; font-size:15px; color:#13241f; min-height:50px;
+    }
+    .tc-search-input-wrap input::placeholder { color:#9ab4a8; }
+    .tc-search-btn {
+      min-height:54px; padding:0 28px;
+      border:0; border-radius:12px;
+      background:linear-gradient(135deg,#075c45,#0f8f78);
+      color:#fff; font:inherit; font-size:15px; font-weight:800;
+      display:flex; align-items:center; gap:9px;
+      box-shadow:0 12px 26px rgba(6,54,38,.22);
+      transition:transform .18s, filter .18s;
+    }
+    .tc-search-btn:hover { transform:translateY(-2px); filter:brightness(1.05); }
+    .tc-search-btn svg { width:18px; height:18px; }
+
+    /* Recent refs */
+    .tc-recents { margin-top:22px; }
+    .tc-recents-label { font-size:12px; font-weight:800; color:#9ab4a8; letter-spacing:.06em; margin:0 0 10px; }
+    .tc-recents-chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .tc-ref-chip {
+      padding:6px 14px; border-radius:999px;
+      border:1.5px solid #d8e7df; background:#f4fbf6;
+      font-size:13px; font-weight:700; color:#075c45; cursor:pointer;
+      transition:.18s;
+    }
+    .tc-ref-chip:hover { border-color:#075c45; background:#edf7f1; }
+
+    /* -- Result Card ------------------------------- */
+    .tc-result { display:none; margin-top:28px; }
+    .tc-result.show { display:block; animation:tcFadeIn .4s ease; }
+    @keyframes tcFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+
+    .tc-result-header {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:16px; flex-wrap:wrap;
+      padding:20px 24px; border-radius:16px 16px 0 0;
+      background:linear-gradient(135deg,#063626,#075c45); color:#fff;
+    }
+    .tc-result-ref { font-size:13px; color:rgba(255,255,255,.7); margin-bottom:4px; }
+    .tc-result-title { font-size:18px; font-weight:800; margin:0; }
+    .tc-result-dept  { font-size:13px; color:rgba(255,255,255,.75); margin:4px 0 0; }
+    .tc-status-badge {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:7px 16px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.15);
+      backdrop-filter:blur(8px);
+      font-size:13px; font-weight:800; color:#fff; white-space:nowrap;
+    }
+    .tc-status-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:#f5bd2f; animation:tcPulse 1.4s ease infinite;
+    }
+    @keyframes tcPulse {
+      0%,100%{box-shadow:0 0 0 0 rgba(245,189,47,.6)}
+      50%{box-shadow:0 0 0 6px rgba(245,189,47,0)}
+    }
+
+    /* Meta row */
+    .tc-meta-row {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:0; border:1px solid #d8e7df;
+      border-top:0; border-radius:0;
+      background:#fff;
+    }
+    .tc-meta-item {
+      padding:16px 20px;
+      border-right:1px solid #d8e7df;
+    }
+    .tc-meta-item:last-child { border-right:0; }
+    .tc-meta-label { font-size:11px; font-weight:800; color:#9ab4a8; letter-spacing:.06em; margin-bottom:4px; }
+    .tc-meta-value { font-size:14px; font-weight:700; color:#13241f; }
+
+    /* Timeline */
+    .tc-timeline-section {
+      border:1px solid #d8e7df; border-top:0; border-radius:0 0 16px 16px;
+      padding:24px 24px 28px; background:#fff;
+    }
+    .tc-timeline-title { font-size:14px; font-weight:800; color:#13241f; margin:0 0 20px; }
+    .tc-timeline { list-style:none; margin:0; padding:0; }
+    .tc-timeline li {
+      display:grid; grid-template-columns:40px 1fr;
+      gap:14px; position:relative; padding-bottom:24px;
+    }
+    .tc-timeline li:last-child { padding-bottom:0; }
+    .tc-timeline li::before {
+      content:""; position:absolute;
+      left:15px; top:34px; bottom:0;
+      width:2px; background:#e8f4ee;
+    }
+    .tc-timeline li:last-child::before { display:none; }
+    .tc-tl-node {
+      width:32px; height:32px; border-radius:50%;
+      border:2px solid #d8e7df; background:#fff;
+      display:grid; place-items:center; flex-shrink:0; z-index:1;
+      transition:.3s;
+    }
+    .tc-tl-node svg { width:16px; height:16px; color:#9ab4a8; }
+    .tc-timeline li.is-complete .tc-tl-node {
+      background:#075c45; border-color:#075c45;
+    }
+    .tc-timeline li.is-complete .tc-tl-node svg { color:#fff; }
+    .tc-timeline li.is-active .tc-tl-node {
+      background:#f5bd2f; border-color:#e59a1c;
+      box-shadow:0 0 0 4px rgba(245,189,47,.2);
+    }
+    .tc-timeline li.is-active .tc-tl-node svg { color:#2d1e05; }
+    .tc-tl-content { padding-top:4px; }
+    .tc-tl-content strong { display:block; font-size:14px; color:#13241f; }
+    .tc-tl-content p { margin:4px 0 0; font-size:13px; color:#60746b; line-height:1.5; }
+    .tc-tl-content time { font-size:12px; color:#9ab4a8; margin-top:3px; display:block; }
+
+    /* Response section */
+    .tc-response {
+      margin-top:16px; padding:16px 18px;
+      border:1.5px solid #b5d4c4; border-radius:12px;
+      background:#f0fbf5;
+    }
+    .tc-response-label {
+      font-size:12px; font-weight:800; color:#075c45;
+      letter-spacing:.06em; margin-bottom:8px;
+    }
+    .tc-response p { margin:0; font-size:14px; color:#2e4a3d; line-height:1.6; }
+    .tc-response-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid #cfe5da; }
+    .tc-response-head h3 { margin:3px 0 0; color:#123b2e; font-size:18px; }
+    .tc-response-count { min-width:34px; height:34px; display:grid; place-items:center; border-radius:50%; background:#075c45; color:#fff; font-weight:800; }
+    .tc-owner-response { margin-top:12px; padding:18px; border:1px solid #d4e8de; border-radius:10px; background:#fff; box-shadow:0 5px 16px rgba(6,54,38,.05); }
+    .tc-owner-response.staff { border-left:4px solid #0f8f78; }
+    .tc-owner-response.student { background:#f8faf9; border-left:4px solid #9eb5aa; }
+    .tc-owner-response-meta { display:flex; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .tc-owner-response-meta strong { color:#075c45; font-size:13px; }
+    .tc-owner-response time { color:#72877d; font-size:11px; }
+    .tc-owner-response p { white-space:pre-wrap; overflow-wrap:anywhere; }
+    .tc-owner-response>small { display:block; margin:-5px 0 10px; color:#71867c; }
+    .tc-response-signature { display:block; max-width:220px; max-height:90px; margin-top:14px; object-fit:contain; }
+    .umat-response-letter { margin-top:18px; border:1px solid #d7e2dc; border-radius:4px; background:#fff; color:#172720; box-shadow:0 12px 35px rgba(18,47,36,.1); overflow:hidden; }
+    .umat-letterhead { padding:22px 28px 18px; display:flex; align-items:center; gap:18px; border-bottom:3px double #075c45; }
+    .umat-letterhead img { width:92px; height:72px; object-fit:contain; }
+    .umat-letterhead div { display:grid; gap:3px; }
+    .umat-letterhead strong { color:#075c45; font-family:Georgia,serif; font-size:21px; }
+    .umat-letterhead span { color:#a47300; font-size:11px; font-style:italic; }
+    .umat-letterhead small { color:#52675d; font-weight:700; }
+    .umat-letter-meta { padding:18px 30px 0; display:flex; justify-content:space-between; gap:18px; color:#52675d; font-size:12px; }
+    .umat-letter-body { padding:24px 30px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; }
+    .umat-letter-body>p { margin:0 0 18px; white-space:pre-wrap; }
+    .umat-letter-signoff { width:max-content; max-width:100%; display:grid; gap:3px; font-family:Arial,sans-serif; }
+    .umat-letter-signoff .tc-response-signature { margin:0 0 4px; }
+    .umat-letter-signoff>strong { font-family:Georgia,serif; color:#075c45; }
+    .umat-letter-signoff>span { color:#60746b; font-size:12px; }
+    .umat-response-letter footer { padding:10px 28px; border-top:1px solid #e2ebe6; background:#f7faf8; color:#72857c; font-size:10px; text-align:center; }
+    @media(max-width:600px){.umat-letterhead{padding:18px;align-items:flex-start}.umat-letterhead img{width:66px;height:54px}.umat-letterhead strong{font-size:16px}.umat-letter-meta{padding:16px 18px 0;flex-direction:column;gap:5px}.umat-letter-body{padding:20px 18px}}
+
+    /* Print / share row */
+    .tc-result-actions {
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;
+    }
+    .tc-action-btn {
+      display:flex; align-items:center; gap:7px;
+      padding:9px 18px; border-radius:9px;
+      font:inherit; font-size:13px; font-weight:700; cursor:pointer;
+      transition:.18s;
+    }
+    .tc-action-btn svg { width:15px; height:15px; }
+    .tc-btn-print {
+      border:1.5px solid #d8e7df; background:#fff; color:#13241f;
+    }
+    .tc-btn-print:hover { border-color:#075c45; color:#075c45; }
+    .tc-btn-pdf { border:0; background:#075c45; color:#fff; text-decoration:none; }
+    .tc-btn-pdf:hover { background:#043f30; }
+    .tc-btn-new {
+      border:0; background:linear-gradient(135deg,#075c45,#0f8f78);
+      color:#fff; box-shadow:0 8px 20px rgba(6,54,38,.18);
+    }
+    .tc-btn-new:hover { filter:brightness(1.05); }
+
+    /* No result state */
+    .tc-no-result {
+      display:none; margin-top:28px; padding:36px 24px;
+      border:1.5px dashed #d8e7df; border-radius:16px; text-align:center;
+    }
+    .tc-no-result.show { display:block; animation:tcFadeIn .4s ease; }
+    .tc-no-result-icon { font-size:48px; margin-bottom:12px; }
+    .tc-no-result h3 { margin:0 0 6px; color:#13241f; }
+    .tc-no-result p  { margin:0; font-size:14px; color:#60746b; }
+
+    /* -- Sidebar ----------------------------------- */
+    .tc-sidebar { display:grid; gap:20px; }
+    .tc-side-card {
+      background:#fff; border-radius:16px;
+      box-shadow:0 6px 28px rgba(6,54,38,.08); overflow:hidden;
+    }
+    .tc-side-header {
+      padding:14px 18px;
+      background:linear-gradient(135deg,#063626,#075c45);
+      color:#fff; font-size:14px; font-weight:800;
+      display:flex; align-items:center; gap:9px;
+    }
+    .tc-side-header svg { width:17px; height:17px; }
+    .tc-side-body { padding:18px; }
+
+    /* Status legend */
+    .tc-status-legend { display:grid; gap:10px; }
+    .tc-legend-item {
+      display:flex; align-items:flex-start; gap:10px;
+      font-size:13px; line-height:1.5; color:#2e4a3d;
+    }
+    .tc-legend-dot {
+      width:10px; height:10px; margin-top:5px; border-radius:50%; flex-shrink:0;
+    }
+    .tc-legend-item > span:last-child { min-width:0; flex:1; overflow-wrap:anywhere; }
+
+    /* FAQ */
+    .tc-faq-list { display:grid; gap:10px; }
+    .tc-faq-item {
+      border:1px solid #d8e7df; border-radius:10px; overflow:hidden;
+    }
+    .tc-faq-q {
+      width:100%; display:flex; align-items:center; justify-content:space-between;
+      gap:10px; padding:12px 14px; background:0; border:0;
+      font:inherit; font-size:13px; font-weight:700; color:#13241f;
+      cursor:pointer; text-align:left;
+    }
+    .tc-faq-q svg { width:16px; height:16px; color:#60746b; transition:transform .2s; flex-shrink:0; }
+    .tc-faq-q:hover { background:#f3f8f5; }
+    .tc-faq-q:focus-visible { outline:3px solid rgba(15,143,120,.3); outline-offset:-3px; }
+    .tc-faq-q[aria-expanded="true"] svg { transform:rotate(180deg); }
+    .tc-faq-a {
+      display:none; padding:0 14px 12px;
+      font-size:13px; color:#60746b; line-height:1.6;
+    }
+    .tc-faq-a.open { display:block; }
+
+    .tc-cta {
+      background:linear-gradient(135deg,#075c45,#0f8f78);
+      border-radius:16px; padding:22px 18px; color:#fff;
+    }
+    .tc-cta h3 { margin:0 0 6px; font-size:15px; }
+    .tc-cta p  { margin:0 0 16px; font-size:13px; color:rgba(255,255,255,.8); }
+    .tc-cta a {
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      min-height:42px; border-radius:9px;
+      background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3);
+      color:#fff; font-size:13px; font-weight:700; text-decoration:none; transition:.2s;
+    }
+    .tc-cta a:hover { background:rgba(255,255,255,.28); }
+
+    /* -- Responsive -------------------------------- */
+    @media(max-width:900px){
+      .tc-grid { grid-template-columns:1fr; }
+      .tc-sidebar { grid-row:1; }
+      .tc-meta-row { grid-template-columns:1fr; }
+      .tc-meta-item { border-right:0; border-bottom:1px solid #d8e7df; }
+      .tc-meta-item:last-child { border-bottom:0; }
+    }
+    @media(max-width:600px){
+      .tc-search-body { padding:20px 18px 26px; }
+      .tc-search-header { padding:22px 18px 18px; }
+      .tc-result-header { flex-direction:column; }
+      .tc-timeline-section { padding:18px 16px 22px; }
+    }
+  </style>
+  <link rel="stylesheet" href="password-visibility.css?v=20260721-1">
+</head>
+<body class="tc-page">
+
+  <!-- -- HEADER ------------------------------------ -->
+  <header class="site-header">
+    
+
+  <!-- -- HERO -------------------------------------- -->
+  <section class="tc-hero">
+    <div class="tc-hero-bubbles" aria-hidden="true">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+    <div class="container tc-hero-inner">
+      <div class="tc-hero-text">
+        <div class="tc-hero-badge">
+          <svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+          Complaint Tracker
+        </div>
+        <h1>Track Your Complaint</h1>
+        <p>Enter your unique reference number to get a real-time update on the status of your complaint and any department responses.</p>
+      </div>
+      <div class="tc-hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- -- BREADCRUMB ------------------------------- -->
+  <div class="tc-breadcrumb">
+    <div class="container">
+      <a href="homepage.html">Home</a>
+      <span>&rsaquo;</span>
+      <strong>Track Complaint</strong>
+    </div>
+  </div>
+
+  <!-- -- BODY ------------------------------------- -->
+  <main class="tc-body">
+    <div class="container">
+      <div class="tc-grid">
+
+        <!-- -- MAIN COLUMN ------------------------ -->
+        <div>
+
+          <!-- Search card -->
+          <div class="tc-search-card">
+            <div class="tc-search-header">
+              <div class="tc-search-header-icon">
+                <svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+              </div>
+              <div>
+                <h2>Complaint Status Tracker</h2>
+                <p>Enter your reference number to see the latest updates</p>
+              </div>
+            </div>
+            <div class="tc-search-body">
+              <p class="tc-search-intro">Enter the reference number for a complaint submitted through your student account. You must be signed in to view its status.</p>
+
+              <form id="trackComplaintForm" novalidate>
+                <div class="tc-search-row">
+                  <div class="tc-search-input-wrap">
+                    <svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+                    <input id="trackReference" type="text" placeholder="Enter complaint reference number" autocomplete="off" required>
+                  </div>
+                  <button type="submit" class="tc-search-btn">
+                    <svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+                    Track
+                  </button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+          <!-- -- RESULT (shown after search) ------ -->
+          <div class="tc-result" id="trackResult" role="region" aria-label="Complaint result" aria-live="polite">
+
+            <div class="tc-result-header">
+              <div>
+                <p class="tc-result-ref" id="resRef">Reference</p>
+                <h2 class="tc-result-title" id="resTitle">Complaint details</h2>
+                <p class="tc-result-dept" id="resDept">Department</p>
+              </div>
+              <div class="tc-status-badge">
+                <span class="tc-status-dot"></span>
+                <span id="resStatus">—</span>
+              </div>
+            </div>
+
+            <div class="tc-meta-row">
+              <div class="tc-meta-item">
+                <p class="tc-meta-label">SUBMITTED ON</p>
+                <p class="tc-meta-value" id="resDate">—</p>
+              </div>
+              <div class="tc-meta-item">
+                <p class="tc-meta-label">SEVERITY</p>
+                <p class="tc-meta-value" id="resSeverity">Medium</p>
+              </div>
+              <div class="tc-meta-item">
+                <p class="tc-meta-label">EXPECTED RESOLUTION</p>
+                <p class="tc-meta-value">Within 5 working days</p>
+              </div>
+            </div>
+
+            <div class="tc-timeline-section">
+              <p class="tc-timeline-title">Progress Timeline</p>
+              <ul class="tc-timeline" id="trackTimelineItems">
+                <li class="is-complete">
+                  <span class="tc-tl-node">
+                    <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5 1.4-1.4L9 14.2 18.6 4.6 20 6Z"/></svg>
+                  </span>
+                  <div class="tc-tl-content">
+                    <strong>Complaint Submitted</strong>
+                    <p>Your complaint was received and a reference number was assigned.</p>
+                    <time>18 Jun 2026, 09:14 AM</time>
+                  </div>
+                </li>
+                <li class="is-active">
+                  <span class="tc-tl-node">
+                    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4Zm-.5 4h1.5v6h-1.5V8Zm0 8h1.5v1.5h-1.5V16Z"/></svg>
+                  </span>
+                  <div class="tc-tl-content">
+                    <strong>—</strong>
+                    <p>The complaint is being reviewed by the Academic Affairs office.</p>
+                    <time>20 Jun 2026, 02:30 PM</time>
+                  </div>
+                </li>
+                <li>
+                  <span class="tc-tl-node">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg>
+                  </span>
+                  <div class="tc-tl-content">
+                    <strong>Response Sent</strong>
+                    <p>The department will provide an official response or request more information.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="tc-tl-node">
+                    <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5 1.4-1.4L9 14.2 18.6 4.6 20 6Z"/></svg>
+                  </span>
+                  <div class="tc-tl-content">
+                    <strong>Resolved</strong>
+                    <p>The complaint has been addressed and closed. A resolution summary will be sent to you.</p>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="tc-response" id="trackResponses">
+                <p class="tc-response-label">DEPARTMENT RESPONSE</p>
+                <p>No department response has been sent yet.</p>
+              </div>
+
+              <div class="tc-result-actions">
+                <button class="tc-action-btn tc-btn-print" onclick="window.print()">
+                  <svg viewBox="0 0 24 24"><path d="M5 4h14v4H5V4ZM3 8h18v8h-3v4H6v-4H3V8Zm3 8v2h12v-2H6Zm0-6h1v2H6v-2Zm2 0h1v2H8v-2Z"/></svg>
+                  Print / Save
+                </button>
+                <a id="downloadResponsePdf" class="tc-action-btn tc-btn-pdf" href="#" hidden>
+                  <svg viewBox="0 0 24 24"><path d="M11 3h2v10l3.5-3.5 1.4 1.4L12 16.8l-5.9-5.9 1.4-1.4L11 13V3ZM5 19h14v2H5v-2Z"/></svg>
+                  Download Response PDF
+                </a>
+                <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required" class="tc-action-btn tc-btn-new" style="text-decoration:none;">
+                  <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>
+                  Submit New Complaint
+                </a>
+              </div>
+            </div>
+
+          </div><!-- /tc-result -->
+
+          <!-- No result state -->
+          <div class="tc-no-result" id="tcNoResult">
+            <div class="tc-no-result-icon" aria-hidden="true">&#128269;</div>
+            <h3>No Complaint Found</h3>
+            <p>We could not find a complaint matching that reference number. Please check the number and try again, or contact the Student Affairs office.</p>
+          </div>
+
+        </div><!-- /main column -->
+
+        <!-- -- SIDEBAR --------------------------- -->
+        <aside class="tc-sidebar">
+
+          <div class="tc-side-card">
+            <div class="tc-side-header">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4Zm-.5 4h1.5v6h-1.5V8Zm0 8h1.5v1.5h-1.5V16Z"/></svg>
+              Status Guide
+            </div>
+            <div class="tc-side-body">
+              <div class="tc-status-legend">
+                <div class="tc-legend-item">
+                  <span class="tc-legend-dot" style="background:#0f8f78;"></span>
+                  <span><strong>Submitted</strong> &mdash; Received and logged in the system.</span>
+                </div>
+                <div class="tc-legend-item">
+                  <span class="tc-legend-dot" style="background:#f5bd2f;animation:tcPulse 1.4s ease infinite;"></span>
+                  <span><strong>Under Review</strong> &mdash; Department is investigating.</span>
+                </div>
+                <div class="tc-legend-item">
+                  <span class="tc-legend-dot" style="background:#5bb9cf;"></span>
+                  <span><strong>Response Sent</strong> &mdash; Department has responded.</span>
+                </div>
+                <div class="tc-legend-item">
+                  <span class="tc-legend-dot" style="background:#4caf50;"></span>
+                  <span><strong>Resolved</strong> &mdash; Complaint has been closed.</span>
+                </div>
+                <div class="tc-legend-item">
+                  <span class="tc-legend-dot" style="background:#e53935;"></span>
+                  <span><strong>Escalated</strong> &mdash; Referred to a higher authority.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tc-side-card">
+            <div class="tc-side-header">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4ZM11 7h2v6h-2V7Zm0 8h2v2h-2v-2Z"/></svg>
+              FAQs
+            </div>
+            <div class="tc-side-body">
+              <div class="tc-faq-list">
+                <div class="tc-faq-item">
+                  <button class="tc-faq-q" aria-expanded="false">
+                    Where do I find my reference number?
+                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7Z"/></svg>
+                  </button>
+                  <div class="tc-faq-a">It was shown on screen and sent to your email when you submitted your complaint. It looks like <strong>UMAT-CMP-XXXX</strong>.</div>
+                </div>
+                <div class="tc-faq-item">
+                  <button class="tc-faq-q" aria-expanded="false">
+                    How long does resolution take?
+                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7Z"/></svg>
+                  </button>
+                  <div class="tc-faq-a">Most complaints are resolved within 5 working days. Critical or escalated cases may take longer.</div>
+                </div>
+                <div class="tc-faq-item">
+                  <button class="tc-faq-q" aria-expanded="false">
+                    Can I update my complaint after submitting?
+                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7Z"/></svg>
+                  </button>
+                  <div class="tc-faq-a">Login to your account and open the complaint using your reference number to add additional information.</div>
+                </div>
+                <div class="tc-faq-item">
+                  <button class="tc-faq-q" aria-expanded="false">
+                    What if I'm not satisfied with the resolution?
+                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7Z"/></svg>
+                  </button>
+                  <div class="tc-faq-a">You may escalate your complaint to the Vice Chancellor's office via the Student Affairs department.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tc-cta">
+            <h3>Need to Submit a New Complaint?</h3>
+            <p>Use our secure form to raise a new concern with any department.</p>
+            <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">
+              <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:currentColor"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>
+              Submit a Complaint
+            </a>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- -- FOOTER ------------------------------------ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Zm3.8 5.5 1.4 1.4-5.8 5.8-3.1-3.1 1.4-1.4 1.7 1.7 4.4-4.4Z"/></svg>
+        <span>UMAT Complaint Management System</span>
+      </div>
+      <p>&copy; 2026 University of Mines and Technology. All Rights Reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+        <a href="accessibility-statement.html">Accessibility</a>
+        <a href="help-center.html">Help</a>
+        <a href="system-status.html">Status</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="complaint-pages.js?v=20260731-response-read"></script>
+  <script src="password-visibility.js?v=20260721-1"></script>
+</body>
+</html>

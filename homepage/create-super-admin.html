@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Super Administrator - UMaT</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="password-visibility.css?v=20260721-1">
+</head>
+<body class="admin-login-page">
+  <main class="admin-login-main">
+    <section class="admin-login-shell">
+      <div class="admin-login-card">
+        <div class="admin-card-brand"><img src="LOGO2.png" alt="UMaT"><div><strong>First-time system setup</strong><small>Create the first Super Administrator</small></div></div>
+        <form id="superAdminSetupForm" class="admin-auth-form">
+          <div class="admin-login-copy"><h1>Create Super Administrator</h1><p>This one-time page closes permanently after the account is created.</p></div>
+          <div class="admin-form-grid">
+            <label class="admin-field"><span>First Name</span><span class="admin-input-shell"><input id="setupFirstName" required maxlength="80" autocomplete="given-name"></span></label>
+            <label class="admin-field"><span>Last Name</span><span class="admin-input-shell"><input id="setupLastName" required maxlength="80" autocomplete="family-name"></span></label>
+            <label class="admin-field"><span>Administrator ID (optional)</span><span class="admin-input-shell"><input id="setupAdministratorId" maxlength="32" pattern="[A-Za-z0-9-]+" placeholder="Auto-generated if blank"></span></label>
+            <label class="admin-field"><span>Email Address</span><span class="admin-input-shell"><input id="setupEmail" type="email" required autocomplete="email" placeholder="name@umat.edu.gh"></span></label>
+            <label class="admin-field"><span>Phone Number</span><span class="admin-input-shell"><input id="setupPhone" type="tel" required autocomplete="tel" placeholder="+233..."></span></label>
+            <label class="admin-field"><span>Password</span><span class="admin-input-shell"><input id="setupPassword" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></span></label>
+            <label class="admin-field"><span>Confirm Password</span><span class="admin-input-shell"><input id="setupConfirmPassword" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></span></label>
+          </div>
+          <p class="admin-message" id="setupMessage" role="status" aria-live="polite"></p>
+          <button class="admin-submit admin-submit-outline" id="setupSubmit" type="submit">Create Super Administrator</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <div class="toast-region" id="setupToast" aria-live="polite"></div>
+  <script src="create-super-admin.js?v=20260721-1"></script>
+  <script src="password-visibility.js?v=20260721-1"></script>
+</body>
+</html>

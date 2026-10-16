@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Email - UMAT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+</head>
+<body class="flow-page verify-page">
+  <main class="flow-shell">
+    <section class="flow-layout" aria-label="Verify email page">
+      <a href="homepage.html" class="flow-logo" aria-label="Back to homepage">
+        <img src="logo-dark.webp" alt="UMAT logo">
+      </a>
+
+      <div class="flow-copy">
+        <div class="flow-badge">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.3 8 5.1 8-5.1V7l-8 5.1L4 7v1.3Z"/></svg>
+          Email Verification
+        </div>
+        <h1>Confirm your student email</h1>
+        <p>Enter the six-digit code sent to your registered email address so updates can reach you securely.</p>
+      </div>
+
+      <form class="flow-card" id="verifyEmailForm">
+        <h2>Verify Email</h2>
+        <p>Type the code from your email. The fields advance automatically as you enter each number.</p>
+
+        <div class="flow-code-grid" aria-label="Verification code">
+          <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 1" required>
+          <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2" required>
+          <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3" required>
+          <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4" required>
+          <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5" required>
+          <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6" required>
+        </div>
+
+        <button class="flow-submit" type="submit">Verify Email</button>
+        <p class="flow-message" id="verifyEmailMessage" aria-live="polite"></p>
+
+        <div class="flow-helper-row">
+          <a href="#" id="resendVerification">Resend code</a>
+          <a href="login.html">Return to login</a>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

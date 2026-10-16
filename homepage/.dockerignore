@@ -1,0 +1,10 @@
+.git
+.agents
+.codex
+backend/*
+!backend/nginx/
+!backend/nginx/nginx.conf
+tests
+files.zip
+*.user
+*.suo

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Complaint &ndash; UMaT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <style>
+    /* -- Page Shell --------------------------------- */
+    .sc-page { min-height: 100vh; background: #f4fbf6; }
+
+    /* -- Hero Banner -------------------------------- */
+    .sc-hero {
+      position: relative;
+      background: linear-gradient(135deg, #063626 0%, #075c45 55%, #0f8f78 100%);
+      overflow: hidden;
+      padding: 56px 0 48px;
+      
+    }
+    .sc-hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1800&q=60') center/cover no-repeat;
+      opacity: .08;
+    }
+    .sc-hero-bubbles { position: absolute; inset: 0; pointer-events: none; }
+    .sc-hero-bubbles span {
+      position: absolute; bottom: -30px;
+      width: var(--s); height: var(--s);
+      left: var(--l);
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.26);
+      background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.55), rgba(255,255,255,.06) 68%);
+      animation: scBubble var(--d) linear infinite;
+      animation-delay: var(--dl);
+      opacity: 0;
+    }
+    .sc-hero-bubbles span:nth-child(1){--l:6%;  --s:14px;--d:9s; --dl:0s;}
+    .sc-hero-bubbles span:nth-child(2){--l:18%; --s:22px;--d:12s;--dl:-3s;}
+    .sc-hero-bubbles span:nth-child(3){--l:34%; --s:10px;--d:8s; --dl:-5s;}
+    .sc-hero-bubbles span:nth-child(4){--l:52%; --s:18px;--d:11s;--dl:-2s;}
+    .sc-hero-bubbles span:nth-child(5){--l:70%; --s:12px;--d:9s; --dl:-7s;}
+    .sc-hero-bubbles span:nth-child(6){--l:85%; --s:24px;--d:14s;--dl:-4s;}
+    @keyframes scBubble {
+      0%   { transform: translate3d(0,0,0) scale(.8); opacity:0; }
+      15%  { opacity:.5; }
+      80%  { opacity:.3; }
+      100% { transform: translate3d(20px,-80vh,0) scale(1.1); opacity:0; }
+    }
+
+    .sc-hero-inner {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    }
+    .sc-hero-badge {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 7px 16px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      color: #bdf8ff; font-size: 13px; font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .sc-hero-badge svg { width:15px; height:15px; }
+    .sc-hero-text h1 {
+      margin: 0; color: #fff;
+      font-size: clamp(30px,4vw,52px); line-height: 1.1;
+    }
+    .sc-hero-text p {
+      margin: 10px 0 0; color: rgba(255,255,255,.82);
+      font-size: 17px; line-height: 1.55; max-width: 560px;
+    }
+    .sc-hero-icon {
+      margin-left: auto;
+      width: 96px; height: 96px;
+      border: 2px solid rgba(255,255,255,.26);
+      border-radius: 24px;
+      background: rgba(255,255,255,.13);
+      backdrop-filter: blur(14px);
+      display: grid; place-items: center; color: #fff; flex-shrink: 0;
+    }
+    .sc-hero-icon svg { width:52px; height:52px; }
+
+    /* -- Breadcrumb --------------------------------- */
+    .sc-breadcrumb {
+      background: #fff;
+      border-bottom: 1px solid #d8e7df;
+      padding: 13px 0;
+      font-size: 14px; color: #60746b;
+    }
+    .sc-breadcrumb a { color: #075c45; font-weight: 700; }
+    .sc-breadcrumb span { margin: 0 8px; }
+
+    /* -- Main Layout -------------------------------- */
+    .sc-body { padding: 48px 0 72px; }
+    .sc-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 340px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* -- Form Card ---------------------------------- */
+    .sc-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(6,54,38,.10);
+      overflow: hidden;
+    }
+    .sc-card-header {
+      padding: 28px 32px 22px;
+      background: linear-gradient(135deg,#075c45,#0f8f78);
+      color: #fff;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .sc-card-header-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.18);
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .sc-card-header-icon svg { width:26px; height:26px; }
+    .sc-card-header h2 { margin:0; font-size:21px; }
+    .sc-card-header p  { margin:5px 0 0; font-size:14px; color:rgba(255,255,255,.8); }
+    .sc-step-pills {
+      display: flex; align-items: center; gap: 8px;
+      padding: 22px 32px 0;
+    }
+    .sc-step-pill {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; color: #60746b;
+    }
+    .sc-step-pill .num {
+      width:26px; height:26px; border-radius:50%;
+      border: 2px solid #d8e7df;
+      display: grid; place-items: center;
+      font-size:12px; font-weight:800; color:#60746b;
+    }
+    .sc-step-pill.active .num { background:#075c45; border-color:#075c45; color:#fff; }
+    .sc-step-pill.active { color:#075c45; }
+    .sc-step-pill.done .num { background:#f5bd2f; border-color:#f5bd2f; color:#2d1e05; }
+    .sc-step-sep { flex:1; height:2px; background:#d8e7df; border-radius:2px; }
+    .sc-step-sep.done { background:#f5bd2f; }
+
+    .sc-form { padding: 26px 32px 32px; }
+    .sc-form-section { margin-bottom: 28px; }
+    .sc-form-section-title {
+      font-size: 13px; font-weight: 800; color: #075c45;
+      text-transform: uppercase; letter-spacing: .06em;
+      margin: 0 0 26px;
+      display: flex; 
+      align-items: center;
+       gap: 8px;
+    }
+    .sc-form-section-title::after {
+      content: ""; flex:1; height:1px; background:#d8e7df;
+    }
+    .sc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .sc-field { display: grid; gap: 7px; margin-bottom: 18px; }
+    .sc-field label {
+      font-size: 13px; font-weight: 800; color: #13241f;
+    }
+    .sc-field label .req { color:#e03e3e; margin-left:2px; }
+    .sc-field input,
+    .sc-field select,
+    .sc-field textarea {
+      width:100%; border:1.5px solid #d8e7df; border-radius:10px;
+      padding: 0 14px; min-height:48px;
+      font: inherit; font-size:15px; color:#13241f;
+      background:#fafcfa; outline:0;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .sc-field input:focus,
+    .sc-field select:focus,
+    .sc-field textarea:focus {
+      border-color:#0f8f78;
+      box-shadow: 0 0 0 4px rgba(15,143,120,.12);
+      background:#fff;
+    }
+    .sc-field textarea { min-height:130px; padding-top:13px; resize:vertical; }
+    .sc-field select { cursor:pointer; }
+    .sc-field .hint {
+      font-size:12px; color:#60746b; margin:0;
+    }
+
+    /* file upload */
+    .sc-upload {
+      border: 2px dashed #b5d4c4; border-radius: 12px;
+      background: #f4fbf6;
+      padding: 28px 20px;
+      text-align: center; cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .sc-upload:hover { border-color:#075c45; background:#edf7f1; }
+    .sc-upload input { display:none; }
+    .sc-upload-icon {
+      width:48px; height:48px; margin:0 auto 12px;
+      background: linear-gradient(135deg,#075c45,#0f8f78);
+      border-radius:12px; display:grid; place-items:center; color:#fff;
+    }
+    .sc-upload-icon svg { width:26px; height:26px; }
+    .sc-upload p { margin:0; font-size:14px; color:#60746b; }
+    .sc-upload strong { color:#075c45; }
+    .sc-upload small { display:block; margin-top:5px; font-size:12px; color:#9ab4a8; }
+
+    /* severity */
+    .sc-severity { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .sc-sev-opt { display:none; }
+    .sc-sev-label {
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+      padding:13px 8px; border:2px solid #d8e7df; border-radius:12px;
+      cursor:pointer; transition:.2s; text-align:center;
+      font-size:12px; font-weight:700; color:#60746b;
+    }
+    .sc-sev-label .dot {
+      width:28px; height:28px; border-radius:50%;
+      display:grid; place-items:center; font-size:14px;
+    }
+    .sc-sev-opt:checked + .sc-sev-label { border-color:#075c45; background:#edf7f1; color:#075c45; }
+    .sev-low  .dot { background:#d4f5e4; }
+    .sev-med  .dot { background:#fff3cd; }
+    .sev-high .dot { background:#ffe0b2; }
+    .sev-crit .dot { background:#ffcdd2; }
+
+    /* anonymous toggle */
+    .sc-anon {
+      display:flex; align-items:center; gap:14px;
+      padding: 16px 18px;
+      border:1.5px solid #d8e7df; border-radius:12px;
+      background:#fafcfa; cursor:pointer;
+    }
+    .sc-anon input { display:none; }
+    .sc-anon-track {
+      width:44px; height:24px; border-radius:99px;
+      background:#d8e7df; position:relative; flex-shrink:0;
+      transition:background .2s;
+    }
+    .sc-anon-track::after {
+      content:""; position:absolute; top:3px; left:3px;
+      width:18px; height:18px; border-radius:50%; background:#fff;
+      box-shadow:0 1px 4px rgba(0,0,0,.2);
+      transition:left .2s;
+    }
+    .sc-anon input:checked ~ .sc-anon-track { background:#075c45; }
+    .sc-anon input:checked ~ .sc-anon-track::after { left:23px; }
+    .sc-anon-text strong { display:block; font-size:14px; color:#13241f; }
+    .sc-anon-text span  { font-size:12px; color:#60746b; }
+
+    /* submit btn */
+    .sc-submit-row { display:flex; gap:14px; align-items:center; margin-top:6px; }
+    .sc-btn-submit {
+      flex:1; min-height:54px; border:0; border-radius:12px;
+      background: linear-gradient(135deg,#075c45,#0f8f78);
+      color:#fff; font:inherit; font-size:16px; font-weight:800;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      box-shadow:0 14px 30px rgba(6,54,38,.22);
+      transition:transform .18s, filter .18s;
+    }
+    .sc-btn-submit:hover {
+       transform:translateY(-2px); filter:brightness(1.05); 
+      }
+    .sc-btn-submit svg {
+       width:20px; height:20px; 
+      }
+    .sc-btn-reset {
+      min-height:54px; padding:0 22px;
+      border:1.5px solid #d8e7df; border-radius:12px;
+      background:#fff; color:#60746b;
+      font:inherit; font-size:14px; font-weight:700;
+      transition:.18s;
+    }
+    .sc-btn-reset:hover { border-color:#075c45; color:#075c45; }
+
+    /* success banner */
+    .sc-success {
+      display:none;
+      margin-top:22px; padding:20px 22px;
+      border:1.5px solid #b5d4c4; border-radius:14px;
+      background: linear-gradient(135deg,#edf7f1,#f4fbf6);
+      gap:14px; align-items:flex-start;
+    }
+    .sc-success.show { display:flex; animation:scFadeIn .4s ease; }
+    @keyframes scFadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .sc-success-icon {
+      width:42px; height:42px; flex-shrink:0;
+      border-radius:50%; background:#075c45;
+      display:grid; place-items:center; color:#fff;
+    }
+    .sc-success-icon svg { width:22px; height:22px; }
+    .sc-success strong { display:block; color:#063626; font-size:15px; margin-bottom:4px; }
+    .sc-success p { margin:0; font-size:13px; color:#60746b; }
+    .sc-ref {
+      display:inline-block; margin-top:8px; padding:5px 12px;
+      background:#075c45; color:#fff; border-radius:7px;
+      font-size:13px; font-weight:800; letter-spacing:.04em;
+    }
+
+    /* -- Sidebar ------------------------------------ */
+    .sc-sidebar { display:grid; gap:20px; }
+
+    .sc-info-card {
+      background:#fff; border-radius:16px;
+      box-shadow:0 6px 28px rgba(6,54,38,.08);
+      overflow:hidden;
+    }
+    .sc-info-card-header {
+      padding:16px 20px;
+      background: linear-gradient(135deg,#063626,#075c45);
+      color:#fff; font-size:15px; font-weight:800;
+      display:flex; align-items:center; gap:10px;
+    }
+    .sc-info-card-header svg { width:18px; height:18px; }
+    .sc-info-card-body { padding:20px; }
+
+    .sc-tip-list { list-style:none; margin:0; padding:0; display:grid; gap:13px; }
+    .sc-tip-list li {
+      display:flex; gap:12px; align-items:flex-start;
+      font-size:13px; color:#2e4a3d; line-height:1.5;
+    }
+    .sc-tip-list li .tip-dot {
+      width:22px; height:22px; border-radius:50%; flex-shrink:0;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg,#f5bd2f,#e59a1c);
+      font-size:11px; font-weight:800; color:#2d1e05; margin-top:1px;
+    }
+
+    .sc-category-list { list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+    .sc-category-list li {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:10px; background:#f4fbf6;
+      font-size:13px; color:#13241f; font-weight:600;
+    }
+    .sc-category-list li svg { width:16px; height:16px; color:#075c45; flex-shrink:0; }
+
+    .sc-contact-card {
+      background: linear-gradient(135deg,#075c45,#0f8f78);
+      border-radius:16px; padding:22px 20px; color:#fff;
+    }
+    .sc-contact-card h3 { margin:0 0 6px; font-size:16px; }
+    .sc-contact-card p  { margin:0 0 16px; font-size:13px; color:rgba(255,255,255,.8); }
+    .sc-contact-item {
+      display:flex; align-items:center; gap:10px;
+      font-size:13px; color:rgba(255,255,255,.9); margin-bottom:10px;
+    }
+    .sc-contact-item svg { width:16px; height:16px; flex-shrink:0; }
+    .sc-contact-btn {
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      min-height:42px; border-radius:9px;
+      background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.3);
+      color:#fff; font:inherit; font-size:13px; font-weight:700;
+      margin-top:16px; backdrop-filter:blur(8px); transition:.2s;
+    }
+    .sc-contact-btn:hover { background:rgba(255,255,255,.28); }
+
+    /* -- Responsive --------------------------------- */
+    @media(max-width:900px){
+      .sc-grid { grid-template-columns:1fr; }
+      .sc-sidebar { grid-row:1; }
+    }
+    @media(max-width:600px){
+      .sc-form { padding:20px 18px 26px; }
+      .sc-row  { grid-template-columns:1fr; }
+      .sc-severity { grid-template-columns:repeat(2,1fr); }
+      .sc-card-header { padding:22px 18px 18px; }
+      .sc-step-pills { padding:18px 18px 0; }
+    }
+  </style>
+</head>
+<body class="sc-page">
+
+  <!-- -- HEADER (same as homepage) ---------------- -->
+  <header class="site-header">
+   
+         
+
+  <!-- -- HERO BANNER ------------------------------ -->
+  <section class="sc-hero">
+    <div class="sc-hero-bubbles" aria-hidden="true">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+    <div class="container sc-hero-inner">
+      <div class="sc-hero-text">
+        <div class="sc-hero-badge">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2Zm8 2H8v16h10V8h-4V4Z"/></svg>
+          Complaint Portal
+        </div>
+        <h1>Submit a Complaint</h1>
+        <p>Use this secure form to raise a concern with the appropriate department. All submissions are treated with confidentiality and responded to promptly.</p>
+      </div>
+      <div class="sc-hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2Zm8 2H8v16h10V8h-4V4Zm-3 7h5v2h-5v-2Zm0 4h4v2h-4v-2ZM9 11h1v2H9v-2Zm0 4h1v2H9v-2Z"/><path d="m16 18 4-4 2 2-4 4h-2v-2Z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- -- BREADCRUMB ------------------------------- -->
+  <div class="sc-breadcrumb">
+    <div class="container">
+      <a href="homepage.html">Home</a>
+      <span>&rsaquo;</span>
+      <strong>Submit Complaint</strong>
+    </div>
+  </div>
+
+  <!-- -- BODY ------------------------------------- -->
+  <main class="sc-body">
+    <div class="container">
+      <div class="sc-grid">
+
+        <!-- -- FORM CARD --------------------------- -->
+        <div class="sc-card">
+          <div class="sc-card-header">
+            <div class="sc-card-header-icon">
+              <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2Zm8 2H8v16h10V8h-4V4Z"/></svg>
+            </div>
+            <div>
+              <h2>Complaint Form</h2>
+              <p>Fill in all required fields to submit your complaint</p>
+            </div>
+          </div>
+
+          <!-- Step pills -->
+          <div class="sc-step-pills" aria-label="Form steps">
+            <div class="sc-step-pill active"><span class="num">1</span> Your Details</div>
+            <div class="sc-step-sep"></div>
+            <div class="sc-step-pill"><span class="num">2</span> Complaint Info</div>
+            <div class="sc-step-sep"></div>
+            <div class="sc-step-pill"><span class="num">3</span> Submit</div>
+          </div>
+
+          <form class="sc-form" id="submitComplaintForm" novalidate>
+
+            <!-- Personal details -->
+            <div class="sc-form-section">
+              <p class="sc-form-section-title">Personal Information</p>
+              <div class="sc-row">
+                <div class="sc-field">
+                  <label>Full Name <span class="req">*</span></label>
+                  <input type="text" name="fullName" placeholder="e.g. Kwame Asante" required>
+                </div>
+                <div class="sc-field">
+                  <label>Index Number <span class="req">*</span></label>
+                  <input type="text" name="indexNumber" placeholder="e.g. UMT/2024/001" required>
+                </div>
+              </div>
+              <div class="sc-row">
+                <div class="sc-field">
+                  <label>Programme / Course</label>
+                  <input type="text" name="programme" placeholder="e.g. Computer Science and Engineering">
+                </div>
+                <div class="sc-field">
+                  <label>Year of Study</label>
+                  <select name="year">
+                    <option value="" disabled selected>Select year</option>
+                    <option>Year 1</option><option>Year 2</option>
+                    <option>Year 3</option><option>Year 4</option>
+                    <option>Postgraduate</option>
+                  </select>
+                </div>
+              </div>
+              <div class="sc-row">
+                <div class="sc-field">
+                  <label>Email Address</label>
+                  <input type="email" name="email" placeholder="student@umat.edu.gh">
+                </div>
+                <div class="sc-field">
+                  <label>Phone Number</label>
+                  <input type="tel" name="phone" placeholder="+233 XX XXX XXXX">
+                </div>
+              </div>
+            </div>
+
+            <!-- Complaint details -->
+            <div class="sc-form-section">
+              <p class="sc-form-section-title">Complaint Details</p>
+
+              <div class="sc-row">
+                <div class="sc-field">
+                  <label>Select Administrative Unit <span class="req">*</span></label>
+                  <input type="search" name="departmentSearch" placeholder="Search administrative units" autocomplete="off" aria-label="Search administrative units">
+                  <select name="department" required>
+                    <option value="" disabled selected>Loading administrative units&hellip;</option>
+                  </select>
+                </div>
+                <div class="sc-field">
+                  <label>Complaint Category <span class="req">*</span></label>
+                  <select name="category" required>
+                    <option value="" disabled selected>Select category</option>
+                    <option>Academic Issue</option>
+                    <option>Financial Issue</option>
+                    <option>Harassment / Misconduct</option>
+                    <option>Facilities & Infrastructure</option>
+                    <option>Service Delivery</option>
+                    <option>Health & Safety</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="sc-field">
+                <label>Complaint Title <span class="req">*</span></label>
+                <input type="text" name="title" placeholder="Brief title of your complaint" required>
+              </div>
+
+              <div class="sc-field">
+                <label>Detailed Description <span class="req">*</span></label>
+                <textarea name="description" placeholder="Describe your complaint in full detail. Include dates, names of persons involved, and any relevant events&hellip;" required></textarea>
+                <p class="hint">Minimum 50 characters. Be as specific as possible for a faster resolution.</p>
+              </div>
+
+              <div class="sc-field">
+                <label>Date of Incident</label>
+                <input type="date" name="incidentDate">
+              </div>
+
+              <div class="sc-field">
+                <label>Severity Level</label>
+                <div class="sc-severity">
+                  <div>
+                    <input class="sc-sev-opt" type="radio" name="severity" id="sev-low" value="low">
+                    <label class="sc-sev-label sev-low" for="sev-low">
+                      <span class="dot" aria-hidden="true">&#128522;</span> Low
+                    </label>
+                  </div>
+                  <div>
+                    <input class="sc-sev-opt" type="radio" name="severity" id="sev-med" value="medium" checked>
+                    <label class="sc-sev-label sev-med" for="sev-med">
+                      <span class="dot" aria-hidden="true">&#128528;</span> Medium
+                    </label>
+                  </div>
+                  <div>
+                    <input class="sc-sev-opt" type="radio" name="severity" id="sev-high" value="high">
+                    <label class="sc-sev-label sev-high" for="sev-high">
+                      <span class="dot" aria-hidden="true">&#128543;</span> High
+                    </label>
+                  </div>
+                  <div>
+                    <input class="sc-sev-opt" type="radio" name="severity" id="sev-crit" value="critical">
+                    <label class="sc-sev-label sev-crit" for="sev-crit">
+                      <span class="dot" aria-hidden="true">&#128680;</span> Critical
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Evidence -->
+            <div class="sc-form-section">
+              <p class="sc-form-section-title">Supporting Evidence (Optional)</p>
+              <label class="sc-upload" for="scFileInput">
+                <input type="file" id="scFileInput" accept=".pdf,.jpg,.jpeg,.png,.docx" multiple>
+                <div class="sc-upload-icon">
+                  <svg viewBox="0 0 24 24"><path d="M11 15V5l-4 4-1.4-1.4L12 2l6.4 5.6L17 9l-4-4v10h-2ZM5 20v-5H3v7h18v-7h-2v5H5Z"/></svg>
+                </div>
+                <p><strong>Click to upload</strong> or drag & drop files here</p>
+                <small>PDF, JPG, PNG, DOCX &mdash; max 10 MB per file</small>
+              </label>
+            </div>
+
+            <!-- Anonymous toggle -->
+            <div class="sc-form-section">
+              <p class="sc-form-section-title">Privacy</p>
+              <label class="sc-anon">
+                <input type="checkbox" id="anonToggle" name="anonymous">
+                <span class="sc-anon-track"></span>
+                <div class="sc-anon-text">
+                  <strong>Submit this complaint anonymously</strong>
+                  <span>Your name and student details will be hidden from the department. Only one anonymous complaint is allowed per 30 days.</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="sc-submit-row">
+              <button type="reset" class="sc-btn-reset">Clear Form</button>
+              <button type="submit" class="sc-btn-submit">
+                <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16Z"/></svg>
+                Submit Complaint
+              </button>
+            </div>
+
+            <!-- Success -->
+            <div class="sc-success" id="submitComplaintMessage" role="alert">
+              <div class="sc-success-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5 1.4-1.4L9 14.2 18.6 4.6 20 6Z"/></svg>
+              </div>
+              <div>
+                <strong>Complaint Submitted Successfully!</strong>
+                <p>Your complaint has been received and automatically forwarded to the appropriate administrative unit.</p>
+                <span class="sc-ref" id="scRefCode">—</span>
+                <dl class="sc-routing-result" id="scRoutingResult"></dl>
+                <p id="scAnonymousConfirmation" hidden>Your identity will remain hidden from the assigned Department Officer.</p>
+              </div>
+            </div>
+
+          </form>
+        </div><!-- /sc-card -->
+
+        <!-- -- SIDEBAR --------------------------- -->
+        <aside class="sc-sidebar">
+
+          <div class="sc-info-card">
+            <div class="sc-info-card-header">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2Zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4Zm-.5 4h1.5v6h-1.5V8Zm0 8h1.5v1.5h-1.5V16Z"/></svg>
+              Tips for a Strong Complaint
+            </div>
+            <div class="sc-info-card-body">
+              <ul class="sc-tip-list">
+                <li><span class="tip-dot">1</span><span>Be specific &mdash; include dates, places, and names of people involved.</span></li>
+                <li><span class="tip-dot">2</span><span>Attach any supporting documents, screenshots, or evidence.</span></li>
+                <li><span class="tip-dot">3</span><span>Choose the correct department so your complaint reaches the right team faster.</span></li>
+                <li><span class="tip-dot">4</span><span>Keep your reference number safe &mdash; you'll need it to track progress.</span></li>
+                <li><span class="tip-dot">5</span><span>Avoid vague language; describe exactly what happened and what outcome you expect.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sc-info-card">
+            <div class="sc-info-card-header">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg>
+              Complaint Categories
+            </div>
+            <div class="sc-info-card-body">
+              <ul class="sc-category-list">
+                <li><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3L12 3Z"/></svg> Academic Issues</li>
+                <li><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3L12 3Z"/></svg> Finance / Bursary</li>
+                <li><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3L12 3Z"/></svg> Harassment &amp; Misconduct</li>
+                <li><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3L12 3Z"/></svg> Facilities &amp; Infrastructure</li>
+                <li><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3L12 3Z"/></svg> Health &amp; Safety</li>
+                <li><svg viewBox="0 0 24 24"><path d="M12 3l9 18H3L12 3Z"/></svg> Service Delivery</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sc-contact-card">
+            <h3>Need Help?</h3>
+            <p>Contact the Student Affairs office if you need assistance filling this form.</p>
+            <div class="sc-contact-item">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.3 8 5.1 8-5.1V7l-8 5.1L4 7v1.3Z"/></svg>
+              studentaffairs@umat.edu.gh
+            </div>
+            <div class="sc-contact-item">
+              <svg viewBox="0 0 24 24"><path d="M6.6 2.5 9.7 5.6c.7.7.7 1.8.1 2.6l-1.4 1.7c1.4 2.6 3.5 4.7 6.1 6.1l1.7-1.4c.8-.6 1.9-.6 2.6.1l3.1 3.1c.6.6.7 1.6.2 2.3-.9 1.3-2.2 2-3.8 2C9.4 22.1 1.9 14.6 1.9 5.7c0-1.6.7-2.9 2-3.8.7-.5 1.7-.4 2.3.2l.4.4Z"/></svg>
+              +233 (0)312 320 280
+            </div>
+            <a href="track-complaint.html" class="sc-contact-btn">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor"><path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4.5 4.4-1.4 1.5-4.5-4.5A6.5 6.5 0 1 1 10.5 4Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"/></svg>
+              Track Existing Complaint
+            </a>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- -- FOOTER ------------------------------------ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Zm3.8 5.5 1.4 1.4-5.8 5.8-3.1-3.1 1.4-1.4 1.7 1.7 4.4-4.4Z"/></svg>
+        <span>UMAT Complaint Management System</span>
+      </div>
+      <p>&copy; 2026 University of Mines and Technology. All Rights Reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+        <a href="accessibility-statement.html">Accessibility</a>
+        <a href="help-center.html">Help</a>
+        <a href="system-status.html">Status</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="app.js?v=20260722-student-gate"></script>
+  <script src="complaint-pages.js?v=20260806-routing"></script>
+</body>
+</html>

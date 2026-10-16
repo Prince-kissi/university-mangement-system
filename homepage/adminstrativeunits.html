@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrative Units – UMAT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="page-animations.css">
+  <style>
+    .dp-hero {
+      min-height: 36vh;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    .dp-hero::before {
+      background-image: url('https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1800&q=60');
+      height: 100%;
+    }
+    .dp-hero-flex > div:first-child {
+      flex: 1 1 520px;
+    }
+    .dp-hero-flex > div:first-child p {
+      color: #fff;
+    }
+    .dp-hero-icon {
+      width: 70px; 
+      height: 60px; 
+      margin-left: auto;
+      position: relative;
+      top: -24px;
+      border: 2px solid rgba(255,255,255,.26); 
+      border-radius: 24px;
+      background: rgba(255,255,255,.13); 
+      backdrop-filter: blur(14px);
+      display: grid; 
+      place-items: center; 
+      color: #fff; flex-shrink: 0;
+      animation: phFadeUp .7s ease .2s both;
+      
+    }
+    .dp-hero-icon svg { 
+      width: 52px; 
+      height: 52px; 
+    }
+
+    .dp-hero-flex { 
+      display: flex; 
+      align-items: center; 
+      gap: 28px; 
+      flex-wrap: wrap; }
+
+    /* ── Filter tabs ─────────────────────────────── */
+    .dp-tabs-bar {
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 10px; 
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .dp-tab-btn {
+      padding: 10px 20px; 
+      border-radius: 999px;
+      border: 1.5px solid #d8e7df; 
+      background: #fff;
+      font: inherit; 
+      font-size: 13.5px; 
+      font-weight: 700; 
+      color: #60746b;
+      transition: .22s; cursor: pointer;
+    }
+    .dp-tab-btn:hover { 
+      border-color: #075c45; 
+      color: #075c45; 
+    }
+    .dp-tab-btn.active {
+      background: linear-gradient(135deg,#075c45,#0f8f78); 
+      border-color: transparent;
+      color: #fff; 
+      box-shadow: 0 10px 22px rgba(6,54,38,.22);
+    }
+
+    /* ── Administrative unit cards ───────────────── */
+    .dp-grid {
+      display: grid; 
+      grid-template-columns: repeat(3,1fr); 
+      gap: 24px;
+    }
+
+    [data-tab-panel] { display: none; }
+    [data-tab-panel].active { display: contents; }
+
+    .dp-card {
+      background: #fff; border-radius: 18px; padding: 26px;
+      border: 1px solid #e3eee8;
+      box-shadow: 0 8px 28px rgba(6,54,38,.06);
+      display: flex; flex-direction: column; gap: 14px;
+      transition: transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease, border-color .3s ease;
+      position: relative; overflow: hidden;
+    }
+    .dp-card::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: linear-gradient(180deg,#075c45,#0f8f78);
+      transform: scaleY(0); transform-origin: top; transition: transform .35s ease;
+    }
+    .dp-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 26px 50px rgba(6,54,38,.16);
+      border-color: transparent;
+    }
+    .dp-card:hover::before { transform: scaleY(1); }
+
+    .dp-card-top { display: flex; align-items: center; gap: 14px; }
+    .dp-icon {
+      width: 54px; height: 54px; border-radius: 14px; flex-shrink: 0;
+      display: grid; place-items: center; background: #edf7f1; color: #075c45;
+      transition: transform .35s ease, background .35s ease, color .35s ease;
+    }
+    .dp-icon svg { width: 28px; height: 28px; }
+    .dp-card:hover .dp-icon {
+      background: linear-gradient(135deg,#075c45,#0f8f78); color: #fff;
+      transform: rotate(-8deg) scale(1.08);
+    }
+    .dp-card-top h3 { margin: 0; font-size: 16.5px; color: #13241f; line-height: 1.3; }
+    .dp-tag {
+      display: inline-block; margin-top: 4px;
+      font-size: 11px; font-weight: 800; letter-spacing: .04em;
+      color: #b87410; background: #fff1c8; padding: 2px 9px; border-radius: 99px;
+    }
+    .dp-card p { margin: 0; font-size: 13.5px; color: #60746b; line-height: 1.6; flex: 1; }
+    .dp-card-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px; border-top: 1px dashed #e3eee8;
+      font-size: 12.5px; color: #60746b;
+    }
+    .dp-card-foot a {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: #075c45; font-weight: 800;
+    }
+    .dp-card-foot a svg { width: 14px; height: 14px; transition: transform .2s ease; }
+    .dp-card-foot a:hover svg { transform: translateX(3px); }
+
+    /* ── Process strip ───────────────────────────── */
+    .dp-process { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; position: relative; }
+    .dp-process::before {
+      content: ""; position: absolute; top: 28px; left: 12%; right: 12%; height: 2px;
+      background: repeating-linear-gradient(90deg, #d8e7df 0 8px, transparent 8px 16px);
+      z-index: 0;
+    }
+    .dp-step { text-align: center; position: relative; z-index: 1; padding: 0 12px; }
+    .dp-step-num {
+      width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 50%;
+      background: #fff; border: 2px solid #075c45; color: #075c45;
+      display: grid; place-items: center; font-weight: 900; font-size: 18px;
+      transition: transform .3s ease, background .3s ease, color .3s ease;
+    }
+    .dp-step:hover .dp-step-num {
+      background: linear-gradient(135deg,#075c45,#0f8f78); color: #fff; transform: scale(1.1);
+    }
+    .dp-step h4 { margin: 0 0 6px; font-size: 14.5px; color: #13241f; }
+    .dp-step p { margin: 0; font-size: 12.5px; color: #60746b; line-height: 1.5; }
+
+    @media (max-width: 980px) {
+      .dp-grid { grid-template-columns: repeat(2,1fr); }
+      .dp-process { grid-template-columns: repeat(2,1fr); gap: 32px 0; }
+      .dp-process::before { display: none; }
+    }
+    @media (max-width: 600px) {
+      .dp-grid { grid-template-columns: 1fr; }
+      .dp-process { grid-template-columns: 1fr; }
+      .dp-hero-icon { top: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <header class="site-header">
+   
+  </header>
+
+  <!-- ── HERO ────────────────────────────────────── -->
+  <section class="ph-hero dp-hero">
+    <div class="ph-bubbles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container ph-hero-inner dp-hero-flex">
+      <div>
+        <div class="ph-badge">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg>
+          Directory
+        </div>
+        <h1>Administrative Units</h1>
+        <p>Every complaint is routed to the right team automatically. Browse the administrative units below to understand who handles what — and how to reach them directly.</p>
+      </div>
+      <div class="dp-hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 3.3 8 5.1 8-5.1V7l-8 5.1L4 7v1.3Z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="ph-breadcrumb">
+    <div class="container"><a href="homepage.html">Home</a><span>›</span><strong>Administrative Units</strong></div>
+  </div>
+
+  <!-- ── DIRECTORY ───────────────────────────────── -->
+  <section class="ph-section">
+    <div class="container">
+      <div class="ph-section-head" data-reveal>
+        <p class="ph-kicker">Find The Right Team</p>
+        <h2>Browse by Category</h2>
+        <span class="ph-underline"></span>
+      </div>
+
+      <div data-tabs>
+        <div class="dp-tabs-bar" data-reveal>
+          <button class="dp-tab-btn active" data-tab-btn="all">All Administrative Units</button>
+          <button class="dp-tab-btn" data-tab-btn="academic">Academic</button>
+          <button class="dp-tab-btn" data-tab-btn="welfare">Welfare &amp; Support</button>
+          <button class="dp-tab-btn" data-tab-btn="admin">Administrative</button>
+        </div>
+
+        <div class="dp-grid" data-reveal-group>
+
+          <div data-tab-panel="all" class="active">
+            <!-- All cards rendered once; category filtering handled via data-cat below -->
+          </div>
+
+          <!-- Academic Affairs / Examinations -->
+          <article class="dp-card" data-cat="academic">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 8-4.2V17h2V8L12 3Zm0 6.7L6.6 7 12 4.3 17.4 7 12 9.7ZM6 13.2v3.6c0 1.8 2.7 3.2 6 3.2s6-1.4 6-3.2v-3.6l-6 3.1-6-3.1Z"/></svg></div>
+              <div><h3>Academic Affairs / Examinations</h3><span class="dp-tag">Academic</span></div>
+            </div>
+            <p>Handles complaints about examinations, grades, course registration, timetables, academic records, and appeals.</p>
+            <div class="dp-card-foot">
+              <span>Response: 2–4 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Quality Assurance -->
+          <article class="dp-card" data-cat="academic">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6V2Zm8 2H8v16h10V8h-4V4Zm-3 7h5v2h-5v-2Zm0 4h4v2h-4v-2ZM9 11h1v2H9v-2Zm0 4h1v2H9v-2Z"/></svg></div>
+              <div><h3>Quality Assurance Unit</h3><span class="dp-tag">Academic</span></div>
+            </div>
+            <p>Addresses concerns about academic standards, service quality, programme delivery, and institutional compliance.</p>
+            <div class="dp-card-foot">
+              <span>Response: 3–5 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Library -->
+          <article class="dp-card" data-cat="academic">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M4 4h7v16H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm9 0h7a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-7V4Z"/></svg></div>
+              <div><h3>University Library</h3><span class="dp-tag">Academic</span></div>
+            </div>
+            <p>Addresses concerns about book availability, fines, study spaces, and access to digital research resources.</p>
+            <div class="dp-card-foot">
+              <span>Response: 1–3 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Finance -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M3 6h18v3H3V6Zm0 5h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7Zm3 3v2h6v-2H6Z"/></svg></div>
+              <div><h3>Finance Office</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Resolves fee disputes, scholarship issues, refund delays, and payment portal errors.</p>
+            <div class="dp-card-foot">
+              <span>Response: 2–4 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Registry -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg></div>
+              <div><h3>Registry</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Handles transcript requests, records corrections, certification issues, and complaint escalations.</p>
+            <div class="dp-card-foot">
+              <span>Response: 3–6 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- ICT Directorate -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H4V4Zm-1 14h18v2H3v-2Z"/></svg></div>
+              <div><h3>ICT Directorate</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Fixes portal login issues, system outages, Wi-Fi access problems, and email account requests.</p>
+            <div class="dp-card-foot">
+              <span>Response: Same day</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Student Affairs -->
+          <article class="dp-card" data-cat="welfare">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.6 9 2.3 5 6 5c2 0 3.4 1.1 4 2.2C10.6 6.1 12 5 14 5c3.7 0 5.4 4 3.5 7.5C19 16.65 12 21 12 21Z"/></svg></div>
+              <div><h3>Student Affairs</h3><span class="dp-tag">Welfare</span></div>
+            </div>
+            <p>The central office for general welfare concerns, harassment reports, complaint escalation, and counselling referrals.</p>
+            <div class="dp-card-foot">
+              <span>Response: 1–2 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Hall/Hostel Administration -->
+          <article class="dp-card" data-cat="welfare">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M3 10 12 3l9 7v11H3V10Zm5 9h8v-6H8v6Z"/></svg></div>
+              <div><h3>Hall/Hostel Administration</h3><span class="dp-tag">Welfare</span></div>
+            </div>
+            <p>Manages room allocation disputes, maintenance issues, utility outages, and roommate conflicts.</p>
+            <div class="dp-card-foot">
+              <span>Response: 1–3 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Health Services -->
+          <article class="dp-card" data-cat="welfare">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.6 9 2.3 5 6 5c2 0 3.4 1.1 4 2.2C10.6 6.1 12 5 14 5c3.7 0 5.4 4 3.5 7.5C19 16.65 12 21 12 21Zm-1-13h2v3h3v2h-3v3h-2v-3H8V11h3V8Z"/></svg></div>
+              <div><h3>Health Services</h3><span class="dp-tag">Welfare</span></div>
+            </div>
+            <p>Addresses concerns about medical service quality, appointment delays, and clinic facility issues.</p>
+            <div class="dp-card-foot">
+              <span>Response: Same day</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Security Unit -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z"/></svg></div>
+              <div><h3>Security Unit</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Reports incidents related to campus safety, theft, lost property, and emergency response concerns.</p>
+            <div class="dp-card-foot">
+              <span>Response: Urgent / Same day</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Counselling Unit -->
+          <article class="dp-card" data-cat="welfare">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2a8 8 0 0 1 6.9 4H5.1A8 8 0 0 1 12 4ZM4 12a8 8 0 0 1 .2-1.8h15.6A8 8 0 0 1 20 12a8 8 0 0 1-.2 1.8H4.2A8 8 0 0 1 4 12Z"/></svg></div>
+              <div><h3>Counselling Unit</h3><span class="dp-tag">Welfare</span></div>
+            </div>
+            <p>Provides support for personal, academic, emotional, and wellbeing concerns affecting students.</p>
+            <div class="dp-card-foot">
+              <span>Response: 2–4 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Works and Physical Development -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M3 10 12 3l9 7v11H3V10Zm5 9h8v-6H8v6Z"/></svg></div>
+              <div><h3>Works and Physical Development</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Handles concerns about university buildings, utilities, maintenance, infrastructure, and physical development.</p>
+            <div class="dp-card-foot">
+              <span>Response: 2–4 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Transport Unit -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16v10H4V6Zm2 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg></div>
+              <div><h3>Transport Unit</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Addresses concerns about university transport, vehicle scheduling, driver conduct, and official travel.</p>
+            <div class="dp-card-foot">
+              <span>Response: 2–4 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Human Resource Unit -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-9 9c0-4.4 4-7 9-7s9 2.6 9 7H3Z"/></svg></div>
+              <div><h3>Human Resource Unit</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Handles staff-related concerns, workplace conduct, employment services, and human resource administration.</p>
+            <div class="dp-card-foot">
+              <span>Response: 3–5 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- Procurement Unit -->
+          <article class="dp-card" data-cat="admin">
+            <div class="dp-card-top">
+              <div class="dp-icon"><svg viewBox="0 0 24 24"><path d="M3 6h18v3H3V6Zm2 5h14v9H5v-9Zm3 2v5h8v-5H8Z"/></svg></div>
+              <div><h3>Procurement Unit</h3><span class="dp-tag">Admin</span></div>
+            </div>
+            <p>Addresses concerns involving purchasing processes, suppliers, tenders, deliveries, and procurement services.</p>
+            <div class="dp-card-foot">
+              <span>Response: 3–5 days</span>
+              <a href="login.html?returnUrl=submit-complaint.html&amp;reason=student-login-required">File <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ─────────────────────────────────── -->
+  <section class="ph-section alt">
+    <div class="container">
+      <div class="ph-section-head" data-reveal>
+        <p class="ph-kicker">How Routing Works</p>
+        <h2>From Submission to Resolution</h2>
+        <span class="ph-underline"></span>
+      </div>
+      <div class="dp-process" data-reveal-group>
+        <div class="dp-step">
+          <div class="dp-step-num">1</div>
+          <h4>You Submit</h4>
+          <p>Fill out the complaint form and select a category.</p>
+        </div>
+        <div class="dp-step">
+          <div class="dp-step-num">2</div>
+          <h4>Auto-Routed</h4>
+          <p>The system assigns it to the right administrative unit instantly.</p>
+        </div>
+        <div class="dp-step">
+          <div class="dp-step-num">3</div>
+          <h4>Reviewed</h4>
+          <p>The administrative unit investigates and prepares a response.</p>
+        </div>
+        <div class="dp-step">
+          <div class="dp-step-num">4</div>
+          <h4>Resolved</h4>
+          <p>You receive an update and the case is closed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm0 2.1 6 2.3V11c0 3.9-2.5 7.5-6 8.8-3.5-1.3-6-4.9-6-8.8V6.4l6-2.3Zm3.8 5.5 1.4 1.4-5.8 5.8-3.1-3.1 1.4-1.4 1.7 1.7 4.4-4.4Z"/></svg>
+        <span>UMAT Complaint Management System</span>
+      </div>
+      <p>&copy; 2026 University of Mines and Technology. All Rights Reserved.</p>
+      <nav aria-label="Footer links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms</a>
+        <a href="cookie-policy.html">Cookies</a>
+        <a href="accessibility-statement.html">Accessibility</a>
+        <a href="help-center.html">Help</a>
+        <a href="system-status.html">Status</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="page-animations.js"></script>
+  <script>
+    // Category filter (separate from the generic tab system since cards use data-cat)
+    const tabBtns = document.querySelectorAll('.dp-tab-btn');
+    const cards = document.querySelectorAll('.dp-card');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+        const key = btn.dataset.tabBtn;
+        cards.forEach(card => {
+          const show = key === 'all' || card.dataset.cat === key;
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

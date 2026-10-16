@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UMaT student complaint dashboard for submitting and tracking complaints.">
+  <title>Student Dashboard - UMaT Complaint Management System</title>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="student-dashboard.css?v=20260804-notification-badge">
+  <link rel="stylesheet" href="password-visibility.css?v=20260721-1">
+</head>
+<body class="student-dashboard-page">
+  <div class="dashboard-shell">
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+      <a class="dashboard-brand" href="homepage.html" aria-label="UMaT homepage">
+        <img src="LOGO2.png" alt="UMaT - University of Mines and Technology">
+      </a>
+
+      <nav class="dashboard-nav" aria-label="Student dashboard navigation">
+        <a class="active" href="#overview" data-section="overview"><span aria-hidden="true">Home</span> Overview</a>
+        <a href="submit-complaint.html"><span aria-hidden="true">New</span> New complaint</a>
+        <a href="#complaints" data-section="complaints"><span aria-hidden="true">List</span> My complaints <b id="complaintNavCount">0</b></a>
+        <a href="#notifications" data-section="notifications"><span aria-hidden="true">Alerts</span> Notifications <b id="notificationNavCount">0</b></a>
+        <a href="#profile" data-section="profile"><span aria-hidden="true">User</span> My profile</a>
+        <a href="#security" data-section="security"><span aria-hidden="true">Safe</span> Security</a>
+      </nav>
+
+      <div class="dashboard-support">
+        <span>Need assistance?</span>
+        <strong>Student Support Desk</strong>
+        <a href="help-center.html">Visit Help Centre</a>
+      </div>
+      <a class="dashboard-logout" href="login.html" data-student-logout><span aria-hidden="true">Exit</span> Log out</a>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <button class="dashboard-menu" type="button" aria-label="Open dashboard menu" aria-expanded="false" aria-controls="dashboardSidebar">Menu</button>
+        <div class="dashboard-search">
+          <span aria-hidden="true">Search</span>
+          <label class="sr-only" for="complaintSearch">Search complaints</label>
+          <input id="complaintSearch" type="search" placeholder="Search by complaint title or reference">
+        </div>
+        <button class="notification-button" type="button" data-section-button="notifications" aria-label="View notifications">Alerts <b id="notificationTopCount">0</b></button>
+        <button class="student-menu" type="button" data-section-button="profile">
+          <span class="student-avatar" id="dashboardTopAvatar">ST</span>
+          <span><strong id="dashboardTopName">Student</strong><small>Student - <span id="dashboardTopIndex">Profile incomplete</span></small></span>
+          <span aria-hidden="true">Profile</span>
+        </button>
+        <a class="topbar-logout" href="login.html" data-student-logout aria-label="Log out of student dashboard">Log out</a>
+      </header>
+
+      <div class="dashboard-content">
+        <section class="dashboard-section active" id="overview" aria-labelledby="overviewTitle">
+          <div class="welcome-panel">
+            <p id="accountCreatedMessage" role="status" hidden></p>
+            <div>
+              <p class="dashboard-eyebrow" id="dashboardDate">Tuesday, 14 July 2026</p>
+              <h1 id="overviewTitle">Good morning, <span id="dashboardWelcomeName">Student</span>.</h1>
+              <p>Here is what is happening with your complaints today.</p>
+            </div>
+            <a class="dashboard-primary-button" href="submit-complaint.html">Submit new complaint</a>
+          </div>
+
+          <div class="metric-grid" id="studentMetrics" aria-label="Complaint summary"></div>
+
+          <div class="dashboard-grid">
+            <section class="dashboard-card complaints-card">
+              <div class="card-heading"><div><span>RECENT ACTIVITY</span><h2>Your complaints</h2></div><button type="button" data-section-button="complaints">View all</button></div>
+              <div class="complaint-list" id="recentComplaints"></div>
+              <p class="search-empty" hidden>No complaints match your search.</p>
+            </section>
+
+            <aside class="dashboard-card update-card" id="latestNotification"><p>No notifications found.</p></aside>
+          </div>
+
+          <section class="quick-actions" aria-labelledby="quickActionsTitle">
+            <div class="card-heading"><div><span>SHORTCUTS</span><h2 id="quickActionsTitle">Quick actions</h2></div></div>
+            <div class="action-grid">
+              <a href="submit-complaint.html"><span class="blue">New</span><div><strong>Submit complaint</strong><small>Report a new concern</small></div><b>Open</b></a>
+              <a href="track-complaint.html"><span class="amber">Find</span><div><strong>Track complaint</strong><small>Check current progress</small></div><b>Open</b></a>
+              <button type="button" data-section-button="profile"><span class="purple">Edit</span><div><strong>Edit profile</strong><small>Update your details</small></div><b>Open</b></button>
+            </div>
+          </section>
+        </section>
+
+        <section class="dashboard-section" id="complaints" aria-labelledby="complaintsTitle">
+          <div class="section-title"><div><p class="dashboard-eyebrow">COMPLAINT HISTORY</p><h1 id="complaintsTitle">My complaints</h1><p>Review every complaint you have submitted and its current status.</p></div><a class="dashboard-primary-button" href="submit-complaint.html">New complaint</a></div>
+          <div class="dashboard-card full-card"><div class="history-table" role="table" aria-label="Complaint history">
+            <div class="history-head" role="row"><span>Complaint</span><span>Department</span><span>Submitted</span><span>Status</span><span></span></div><div id="complaintHistory"></div>
+          </div></div>
+        </section>
+
+        <section class="dashboard-section" id="notifications" aria-labelledby="notificationsTitle">
+          <div class="section-title"><div><p class="dashboard-eyebrow">INBOX</p><h1 id="notificationsTitle">Notifications & responses</h1><p>Messages and progress updates from university departments.</p></div><button class="text-button" id="markAllRead" type="button">Mark all as read</button></div>
+          <div class="notification-list" id="studentNotifications"></div>
+        </section>
+
+        <section class="dashboard-section" id="profile" aria-labelledby="profileTitle">
+          <div class="section-title"><div><p class="dashboard-eyebrow">ACCOUNT DETAILS</p><h1 id="profileTitle">My profile</h1><p>Keep your contact and academic information up to date.</p></div></div>
+          <form class="dashboard-card form-card" id="profileForm">
+            <div class="profile-intro"><span class="student-avatar large" id="profileAvatar">ST</span><div><strong id="profileDisplayName">Student</strong><small>Reference number: <span id="profileDisplayReference">Not provided</span></small><label class="profile-photo-control">Profile photo<input id="profilePhoto" name="photo" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg"><button class="text-button" id="uploadProfilePhoto" type="button">Upload photo</button></label></div></div>
+            <div class="form-grid">
+              <label class="form-field"><span>Full name</span><input id="profileFullName" name="fullName" type="text" required></label>
+              <label class="form-field"><span>Reference number</span><input id="profileReferenceNumber" name="referenceNumber" type="text" required></label>
+              <label class="form-field"><span>Index number</span><input id="profileIndexNumber" name="indexNumber" type="text" readonly></label>
+              <label class="form-field"><span>Date of birth</span><input id="profileDateOfBirth" name="dateOfBirth" type="date"></label>
+              <label class="form-field"><span>Level</span><select id="profileLevel" name="level" required><option value="">Select your level</option><option value="100">Level 100</option><option value="200">Level 200</option><option value="300">Level 300</option><option value="400">Level 400</option></select></label>
+              <label class="form-field"><span>Telephone number</span><input id="profileTelephoneNumber" name="telephoneNumber" type="tel" autocomplete="tel" required></label>
+              <label class="form-field"><span>Account creation date</span><input id="profileAccountCreationDate" name="accountCreationDate" type="date" readonly aria-readonly="true"></label>
+              <label class="form-field"><span>Department</span><select id="profileDepartment" name="department"><option value="">Select your department</option><option value="mathematics-with-finance">Mathematics with Finance</option><option value="computer-science-and-engineering">Computer Science and Engineering</option><option value="geological-engineering">Geological Engineering</option><option value="geomatics-engineering">Geomatics Engineering</option><option value="civil-engineering">Civil Engineering</option><option value="mechanical-engineering">Mechanical Engineering</option><option value="electrical-and-electronic-engineering">Electrical and Electronic Engineering</option><option value="data-science-and-analytics">Data Science and Analytics</option><option value="environmental-and-safety-engineering">Environmental and Safety Engineering</option><option value="transport-planning-and-management">Transport Planning and Management</option></select></label>
+              <label class="form-field"><span>Programme</span><input id="profileProgramme" name="programme" type="text" readonly></label>
+              <label class="form-field"><span>Faculty/School</span><input id="profileFacultyOrSchool" name="facultyOrSchool" type="text" maxlength="180"></label>
+              <label class="form-field"><span>Admission year</span><input id="profileAdmissionYear" name="admissionYear" type="number" min="1900" max="2027" inputmode="numeric"></label>
+              <label class="form-field"><span>UMaT email</span><input id="profileStudentEmail" name="studentEmail" type="email" readonly aria-readonly="true"></label>
+              <label class="form-field"><span>Personal email (optional)</span><input id="profilePersonalEmail" name="personalEmail" type="email" maxlength="254" autocomplete="email"></label>
+              <label class="form-field"><span>Residential address (optional)</span><input id="profileResidentialAddress" name="residentialAddress" type="text" maxlength="500" autocomplete="street-address"></label>
+            </div>
+            <button class="dashboard-primary-button" type="submit">Save changes</button><p class="form-message" id="profileMessage" role="status"></p>
+          </form>
+        </section>
+
+        <section class="dashboard-section" id="security" aria-labelledby="securityTitle">
+          <div class="section-title"><div><p class="dashboard-eyebrow">ACCOUNT SECURITY</p><h1 id="securityTitle">Change password</h1><p>Use at least eight characters and avoid reusing an old password.</p></div></div>
+          <form class="dashboard-card form-card narrow" id="dashboardPasswordForm">
+            <label class="form-field"><span>Current password</span><input id="dashboardCurrentPassword" type="password" autocomplete="current-password" required></label><label class="form-field"><span>New password</span><input id="dashboardNewPassword" type="password" autocomplete="new-password" minlength="8" required></label><label class="form-field"><span>Confirm new password</span><input id="dashboardConfirmPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+            <button class="dashboard-primary-button" type="submit">Update password</button><p class="form-message" id="passwordMessage" role="status"></p>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="student-greeting.js"></script>
+  <script src="student-dashboard.js?v=20260804-notification-badge"></script>
+  <script src="password-visibility.js?v=20260721-1"></script>
+</body>
+</html>
