@@ -68,8 +68,8 @@ SMTP and SMS provider credentials are needed to test real email and SMS delivery
 ### 1. Clone the repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd <YOUR_REPOSITORY_DIRECTORY>
+git clone <university-mangement-system>
+cd <university-mangement-system>
 ```
 
 Run the commands from the project directory containing `package.json` and the `backend/` folder.
